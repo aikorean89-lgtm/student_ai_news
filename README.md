@@ -1,23 +1,40 @@
-# 뉴스 탐정단 — AI 어린이 뉴스 연구소
+# AI 어린이 뉴스 연구소
 
 초등학생(1~6학년)을 위한 AI 기반 어린이 뉴스 문해력 학습 웹앱입니다.
 
+- 사이트: https://student-ai-news.vercel.app
+- `main` 브랜치에 push하면 Vercel이 자동으로 다시 배포합니다.
+
 ## 주요 기능
-- 📰 카테고리별(IT/과학, 사회, 경제, 세계, 어린이, 문화) 뉴스 목록·검색
+- 📰 카테고리별(IT/과학, 사회, 경제, 세계, 어린이, 문화) 뉴스 목록·검색·더 보기
 - 🔍 **쉽게 기사 읽기** — 학년 수준(1~2학년/3~4학년/5~6학년)에 맞춰 AI가 기사를 다시 설명
 - ⚖️ **사실과 의견 보기** — AI가 기사에서 사실과 의견/추측을 구분해 분석
 - 🕵️ **탐정 퀴즈** — AI가 기사 내용으로 이해도 확인 퀴즈를 생성
-- 🏅 포인트·10단계 탐정 등급·연속 출석 스트릭·카테고리별 탐험 지도
+- 🏅 포인트·10단계 탐정 등급·연속 출석·카테고리별 탐험 지도
 - 📔 단어 수첩(쉽게 읽기에서 배운 낱말 자동 수집), 📝 오답노트, 📅 읽기 기록 캘린더
-- 🔊 텍스트 읽어주기(TTS), ☀️/🌙 라이트·다크 모드, ⭐ 스크랩
+- 🔊 읽어 주기(TTS), ☀️/🌙 라이트·다크 모드, ⭐ 스크랩, ✓ 읽은 기사 표시
 
-## 배포 방법 (GitHub Pages)
-1. 저장소 **Settings → Pages**로 이동
-2. Source를 `Deploy from a branch`로 설정, 브랜치는 `main` / `root` 선택 후 저장
-3. 잠시 후 `https://aikorean89-lgtm.github.io/student_ai_news/` 에서 접속 가능
+## AI 기능 켜기 (선생님이 한 번만)
+AI 기능은 서버 함수 `api/ai.js`가 Anthropic API를 대신 불러 줍니다.
+학생은 키를 입력할 필요가 없고, 키는 브라우저에 절대 전달되지 않습니다.
 
-## AI 기능을 쓰려면 (배포 후 필수)
-이 앱의 "쉽게 읽기 · 사실과 의견 · 탐정 퀴즈" 기능은 Claude API를 사용합니다. Claude.ai 밖에 배포한 경우, 앱 안의 **내 탐정 수첩 → 🔑 AI 기능 설정**에서 본인의 Anthropic API 키(`platform.claude.com`에서 발급, `sk-ant-`로 시작)를 입력해야 정상 작동합니다. 키는 각자의 브라우저에만 저장되며 Anthropic 서버로만 직접 전송됩니다.
+1. Vercel 대시보드 → `student-ai-news` 프로젝트 → **Settings → Environment Variables**
+2. `ANTHROPIC_API_KEY` = 본인의 Anthropic API 키 (`platform.claude.com`에서 발급) 추가
+3. **Deployments**에서 최신 배포를 **Redeploy**
 
-## 기술 스택
-순수 HTML/CSS/JavaScript 단일 파일(`index.html`)로 제작되어 별도의 빌드 과정 없이 바로 배포할 수 있습니다.
+확인: `https://student-ai-news.vercel.app/api/ai` 에서 `"ready":true`가 보이면 준비 완료입니다.
+
+### 선택 설정
+| 변수 | 설명 |
+| --- | --- |
+| `AI_MODEL` | 사용할 모델 (기본값 `claude-haiku-5-5`) |
+| `KV_REST_API_URL` / `KV_REST_API_TOKEN` (또는 `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN`) | Upstash Redis를 연결하면 같은 기사·학년의 AI 결과를 반 전체가 함께 써서 비용과 대기 시간이 줄어듭니다. |
+
+### 서버 함수의 보호 장치
+- 같은 사이트에서 온 요청만 받습니다.
+- IP당 10분에 120회까지 (한 교실이 같은 IP를 써도 넉넉하게).
+- 기사 길이 제한, AI 결과 형식 검사(실패 시 한 번 재시도), 결과 캐시.
+
+## 파일 구성
+- `index.html` — 앱 전체 (HTML/CSS/JS 한 파일, 빌드 과정 없음)
+- `api/ai.js` — AI 요청을 처리하는 Vercel 서버 함수
