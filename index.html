@@ -3,37 +3,50 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#09090B">
 <meta name="description" content="어려운 뉴스를 눈높이에 맞게 쉽게 읽고, 사실과 의견을 스스로 구별해 보는 초등학생용 AI 뉴스 학습 사이트">
 <title>AI 어린이 뉴스 연구소</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%232F5BEA'/%3E%3Ccircle cx='14.5' cy='14.5' r='6.5' fill='none' stroke='%23fff' stroke-width='2.6'/%3E%3Cpath d='M19.5 19.5l5 5' stroke='%23fff' stroke-width='2.8' stroke-linecap='round'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
 <script>
-  /* 화면이 뜨기 전에 고른 밝기를 먼저 적용해 깜박임을 막아요 (처음 오면 밝은 화면) */
-  try{var s=JSON.parse(localStorage.getItem('kidsNewsLab:settings')||'{}');document.documentElement.dataset.theme=s.theme==='dark'?'dark':'light'}catch(e){document.documentElement.dataset.theme='light'}
+  /* 화면이 뜨기 전에 고른 밝기를 먼저 적용해 깜박임을 막아요 (처음 오면 어두운 화면) */
+  try{var s=JSON.parse(localStorage.getItem('kidsNewsLab:settings')||'{}');document.documentElement.dataset.theme=s.theme==='light'?'light':'dark'}catch(e){document.documentElement.dataset.theme='dark'}
 </script>
 <style>
 /* AI 어린이 뉴스 연구소 — 선생님이 만든 다른 사이트(그림책 전시회·좋은탴월드)와 같은 규칙:
    하얀(어두운 화면은 검은) 바탕, Pretendard, 회색 단계 + 강조색 하나(파랑), 선 아이콘, 알약 모양 단추 */
 :root{
-  --ink:#111113;--ink-2:#55565E;--ink-3:#85868F;--line:#E6E6EA;--line-2:#D4D5DB;--bg:#F4F4F6;
-  --page:#fff;--surface:#fff;--surface-hover:#EBEBEF;--hd-bg:rgba(255,255,255,.92);
+  --ink:#111113;--ink-2:#52535B;--ink-3:#6E6F78;--line:#E6E6EA;--line-2:#D4D5DB;--bg:#F4F4F6;
+  --page:#FAFAFB;--surface:#fff;--surface-2:#fff;--surface-hover:#EBEBEF;--hd-bg:rgba(250,250,251,.88);
   --main:#2F5BEA;--main-d:#2149CC;--main-soft:#EEF2FF;--on-main:#fff;
   --fact:#0E7A5F;--fact-soft:#E4F4EC;--opinion:#C2410C;--opinion-soft:#FFF0E6;
   --ok:#0B7A55;--ok-soft:#E3F8EF;--err:#C2343A;--err-soft:#FFEDEE;--think:#FFF7DD;
   --shadow:rgba(17,17,19,.10);
-  --c-science:#2563EB;--c-society:#B45309;--c-economy:#0E7A5F;--c-world:#0E7490;--c-kids:#DB2777;--c-culture:#7C3AED;
+  --edge:inset 0 1px 0 rgba(255,255,255,.9);
+  --sh-1:0 1px 2px rgba(17,17,19,.05),0 2px 8px -4px rgba(17,17,19,.08);
+  --sh-2:0 2px 4px rgba(17,17,19,.04),0 16px 32px -16px rgba(17,17,19,.22);
+  --sh-3:0 4px 8px rgba(17,17,19,.05),0 24px 48px -20px rgba(17,17,19,.28);
+  --glow:.42;
+  --c-science:#2563EB;--c-tech:#4F46E5;--c-env:#0F766E;--c-nature:#4D7C0F;--c-society:#C2410C;--c-school:#0369A1;
+  --c-economy:#A16207;--c-world:#0E7490;--c-kids:#BE185D;--c-history:#8B5E34;--c-culture:#7C3AED;--c-sports:#DC2626;
   --sans:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,system-ui,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
   --r:16px;
   color-scheme:light;
 }
 [data-theme=dark]{
-  --ink:#F5F5F7;--ink-2:#B4B4BC;--ink-3:#85858E;--line:#2A2A2E;--line-2:#3A3A40;--bg:#17171A;
-  --page:#000;--surface:#111113;--surface-hover:#222226;--hd-bg:rgba(0,0,0,.84);
+  --ink:#F4F4F6;--ink-2:#B3B3BC;--ink-3:#868690;--line:#26262B;--line-2:#34343A;--bg:#18181C;
+  --page:#09090B;--surface:#121215;--surface-2:#16161A;--surface-hover:#212126;--hd-bg:rgba(9,9,11,.82);
   --main:#7C9BFF;--main-d:#9AB2FF;--main-soft:#151B2E;--on-main:#0B1230;
   --fact:#5FD3A6;--fact-soft:#0F2A20;--opinion:#FF9F6B;--opinion-soft:#2E1B10;
   --ok:#62D8A8;--ok-soft:#12352C;--err:#FF8C95;--err-soft:#3A1A20;--think:#262111;
   --shadow:rgba(0,0,0,.6);
-  --c-science:#82A8FF;--c-society:#F2B05E;--c-economy:#5FD3A6;--c-world:#5CC8DC;--c-kids:#FF8FC0;--c-culture:#B79CFF;
+  --edge:inset 0 1px 0 rgba(255,255,255,.05);
+  --sh-1:0 1px 2px rgba(0,0,0,.5),0 2px 10px -4px rgba(0,0,0,.6);
+  --sh-2:0 2px 4px rgba(0,0,0,.45),0 18px 36px -16px rgba(0,0,0,.85);
+  --sh-3:0 4px 10px rgba(0,0,0,.5),0 28px 56px -20px rgba(0,0,0,.9);
+  --glow:.5;
+  --c-science:#82A8FF;--c-tech:#A5A3FF;--c-env:#4FD1C5;--c-nature:#A3D65C;--c-society:#FF9F5A;--c-school:#6CC3F2;
+  --c-economy:#E8C24D;--c-world:#5CC8DC;--c-kids:#FF8FC0;--c-history:#D9A877;--c-culture:#C4A6FF;--c-sports:#FF7B7B;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
@@ -451,6 +464,87 @@ mark{padding:0 2px;border-radius:4px;background:var(--main-soft);color:inherit;f
 @keyframes pop{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:none}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 
+/* ---------- 세련된 음영·효과 ---------- */
+body{background:
+  radial-gradient(900px 420px at 92% -140px,color-mix(in srgb,var(--main) 10%,transparent),transparent 70%),
+  radial-gradient(760px 380px at -12% -60px,color-mix(in srgb,var(--c-culture) 7%,transparent),transparent 70%),
+  var(--page);background-repeat:no-repeat}
+.hd{box-shadow:0 12px 32px -26px rgba(0,0,0,.6)}
+.search{box-shadow:inset 0 1px 2px rgba(0,0,0,.08);transition:border-color .15s,background .15s,box-shadow .15s}
+.search:focus-within{box-shadow:0 0 0 4px color-mix(in srgb,var(--main) 18%,transparent)}
+.round,.me{box-shadow:var(--edge),var(--sh-1);transition:background .15s,transform .15s,box-shadow .2s}
+.me__pt{box-shadow:0 4px 12px -4px color-mix(in srgb,var(--main) 80%,transparent)}
+/* 분야 탭: 알약 모양, 고른 탭은 분야 색으로 은은하게 빛나요 */
+.gnb .wrap{align-items:center;gap:2px}
+.gnb button{height:36px;padding:0 11px;border-radius:999px;transition:background .18s,color .18s,box-shadow .2s,transform .18s}
+.gnb i{display:none}
+.gnb button[aria-current=true] i{display:inline}
+.gnb button[aria-current=true]{color:var(--ink);background:color-mix(in srgb,var(--cc,var(--main)) 15%,var(--surface));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--cc,var(--main)) 45%,transparent),0 6px 16px -8px color-mix(in srgb,var(--cc,var(--main)) 75%,transparent)}
+.gnb button[aria-current=true]::after{display:none}
+.gnb .dot{box-shadow:0 0 0 3px color-mix(in srgb,var(--cc) 20%,transparent)}
+/* 단추 */
+.btn{transition:background .15s,box-shadow .2s,opacity .15s,transform .15s}
+.btn:active:not(:disabled){transform:scale(.97)}
+.btn--main{box-shadow:0 8px 20px -10px color-mix(in srgb,var(--main) 85%,transparent),inset 0 1px 0 rgba(255,255,255,.2)}
+.btn--ink{box-shadow:var(--sh-1)}
+.btn--line{background:var(--surface-2);box-shadow:inset 0 0 0 1.5px var(--line),var(--sh-1)}
+.seg{box-shadow:inset 0 1px 2px rgba(0,0,0,.12)}
+.seg button{transition:background .15s,color .15s,box-shadow .15s}
+.seg button[aria-pressed=true]{box-shadow:0 1px 2px rgba(0,0,0,.18),0 4px 10px -4px rgba(0,0,0,.22)}
+/* 제목·구역 */
+.intro h1{background:linear-gradient(100deg,var(--ink) 35%,color-mix(in srgb,var(--main) 80%,var(--ink)));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sec__h{border-bottom:0;background:linear-gradient(var(--main),var(--main)) left bottom/48px 2px no-repeat,linear-gradient(var(--line-2),var(--line-2)) left bottom/100% 1px no-repeat}
+/* 카드·판 */
+.feat{position:relative;overflow:hidden;border:1px solid var(--line);background:radial-gradient(120% 150% at 100% 0,color-mix(in srgb,var(--cc) 22%,transparent) 0,transparent 55%),linear-gradient(180deg,var(--surface-2),var(--bg));box-shadow:var(--edge),var(--sh-2);transition:transform .22s,box-shadow .22s,border-color .22s}
+.feat__k{box-shadow:var(--sh-1)}
+.mycard,.panel,.result{background:linear-gradient(180deg,var(--surface-2),var(--surface));box-shadow:var(--edge),var(--sh-2)}
+.result{border:1px solid var(--line)}
+.av{box-shadow:var(--edge),inset 0 0 0 1px var(--line)}
+.bar{box-shadow:inset 0 1px 2px rgba(0,0,0,.14)}
+.bar>i{background:linear-gradient(90deg,var(--main),color-mix(in srgb,var(--main) 55%,var(--c-culture)));box-shadow:0 0 12px -2px color-mix(in srgb,var(--main) 70%,transparent)}
+.nc{position:relative;overflow:hidden;background:linear-gradient(180deg,var(--surface-2),var(--surface));box-shadow:var(--edge),var(--sh-1);transition:transform .22s,box-shadow .22s,border-color .22s}
+.nc::before{content:'';position:absolute;inset:0 0 auto 0;height:3px;background:linear-gradient(90deg,var(--cc),color-mix(in srgb,var(--cc) 30%,transparent));opacity:0;transition:opacity .22s}
+.kick{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 9px;border-radius:7px;background:color-mix(in srgb,var(--cc) 14%,transparent)}
+.kick::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--cc)}
+.read-tag,.new-tag{box-shadow:var(--edge)}
+.mtab,.tile{background:linear-gradient(180deg,var(--surface-2),var(--surface));box-shadow:var(--edge),var(--sh-1);transition:border-color .18s,background .18s,box-shadow .22s,transform .22s}
+.mtab[aria-pressed=true]{border-color:var(--main);background:linear-gradient(180deg,color-mix(in srgb,var(--main) 16%,var(--surface)),var(--surface));box-shadow:var(--edge),0 0 0 3px color-mix(in srgb,var(--main) 16%,transparent),0 18px 36px -20px color-mix(in srgb,var(--main) 80%,transparent)}
+.mtab__i{background:linear-gradient(145deg,var(--surface-hover),var(--bg));box-shadow:var(--edge),inset 0 0 0 1px var(--line);transition:transform .22s,background .22s,box-shadow .22s}
+.mtab[aria-pressed=true] .mtab__i{background:linear-gradient(145deg,var(--main),color-mix(in srgb,var(--main) 60%,var(--c-culture)));box-shadow:0 8px 18px -8px color-mix(in srgb,var(--main) 85%,transparent)}
+.verify{border:1px solid var(--line);box-shadow:var(--edge)}
+.mp__hero{border:1px solid var(--line);background:radial-gradient(90% 150% at 100% 0,color-mix(in srgb,var(--main) 15%,transparent),transparent 60%),linear-gradient(180deg,var(--surface-2),var(--bg));box-shadow:var(--edge),var(--sh-2)}
+.stat,.wl__i,.foq,.wn__c,.cal{background:linear-gradient(180deg,var(--surface-2),var(--surface));box-shadow:var(--edge),var(--sh-1)}
+.stat{transition:transform .2s,box-shadow .2s}
+.opt{box-shadow:var(--sh-1);transition:border-color .15s,background .15s,transform .15s,box-shadow .15s}
+.fc__face{box-shadow:var(--edge),var(--sh-3)}
+.fc.is-flip .fc__face{box-shadow:var(--edge),var(--sh-3),0 0 0 4px color-mix(in srgb,var(--main) 16%,transparent)}
+.pop,.modal__box{box-shadow:var(--edge),var(--sh-3)}
+.toast{box-shadow:var(--sh-3)}
+.empty{border:1px dashed var(--line-2)}
+.nc:focus-visible,.feat:focus-visible{outline-offset:3px}
+/* 마우스를 올릴 수 있는 기기에서만 들림 효과 (휴대폰은 눌렀을 때 그대로) */
+@media(hover:hover){
+  .gnb button:hover{background:var(--bg);color:var(--ink);transform:translateY(-1px)}
+  .gnb button[aria-current=true]:hover{background:color-mix(in srgb,var(--cc,var(--main)) 20%,var(--surface))}
+  .round:hover:not(:disabled),.me:hover{transform:translateY(-1px);box-shadow:var(--edge),var(--sh-2)}
+  .btn--main:hover{transform:translateY(-1px);box-shadow:0 12px 24px -10px color-mix(in srgb,var(--main) 90%,transparent),inset 0 1px 0 rgba(255,255,255,.2)}
+  .btn--line:hover{background:var(--surface-2);box-shadow:inset 0 0 0 1.5px var(--ink-3),var(--sh-2);transform:translateY(-1px)}
+  .feat:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--cc) 40%,var(--line));box-shadow:var(--edge),var(--sh-3),0 22px 44px -26px color-mix(in srgb,var(--cc) 80%,transparent)}
+  .nc:hover{transform:translateY(-4px);border-color:color-mix(in srgb,var(--cc) 45%,var(--line));box-shadow:var(--edge),var(--sh-2),0 18px 36px -22px color-mix(in srgb,var(--cc) 85%,transparent)}
+  .nc:hover::before{opacity:1}
+  .mtab:hover,.tile:hover{transform:translateY(-3px);border-color:var(--line-2);box-shadow:var(--edge),var(--sh-2)}
+  .tile:hover{border-color:color-mix(in srgb,var(--main) 45%,var(--line))}
+  .mtab[aria-pressed=true]:hover{border-color:var(--main)}
+  .mtab:hover .mtab__i,.tile:hover .mtab__i{transform:scale(1.06) rotate(-4deg)}
+  .stat:hover{transform:translateY(-2px);box-shadow:var(--edge),var(--sh-2)}
+  .opt:hover:not(:disabled){transform:translateY(-1px);box-shadow:var(--sh-2)}
+}
+.nc:hover{transform:none}
+@media(hover:hover){.nc:hover{transform:translateY(-4px)}}
+
+@media(max-width:1080px){
+  .gnb .wrap{padding-right:32px;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 36px),transparent)}
+}
 @media(max-width:1000px){
   .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .top{grid-template-columns:1fr}
@@ -467,7 +561,8 @@ mark{padding:0 2px;border-radius:4px;background:var(--main-soft);color:inherit;f
   .me__lbl{display:none}
   .me__pt{height:28px}
   .search{order:3;flex:1 0 100%;max-width:none;margin:4px 0 10px}
-  .gnb .wrap{height:46px;padding-inline:6px}
+  .gnb .wrap{height:48px;padding-inline:10px 28px;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 36px),transparent)}
+  .gnb button{height:34px}
   .gnb button{padding:0 10px;font-size:15px}
   .gnb button[aria-current=true]::after{left:8px;right:8px}
   .intro{padding-top:26px}
@@ -564,12 +659,18 @@ mark{padding:0 2px;border-radius:4px;background:var(--main-soft);color:inherit;f
 ========================================================= */
 const CATEGORIES = [
   {id:'all',     label:'전체'},
-  {id:'science', label:'IT/과학'},
+  {id:'science', label:'과학·우주'},
+  {id:'tech',    label:'IT·AI'},
+  {id:'env',     label:'환경·날씨'},
+  {id:'nature',  label:'동물·자연'},
   {id:'society', label:'사회'},
+  {id:'school',  label:'교육'},
   {id:'economy', label:'경제'},
   {id:'world',   label:'세계'},
   {id:'kids',    label:'어린이'},
-  {id:'culture', label:'문화'},
+  {id:'history', label:'역사'},
+  {id:'culture', label:'문화·예술'},
+  {id:'sports',  label:'스포츠'},
 ];
 function catInfo(id){ return CATEGORIES.find(c=>c.id===id) || CATEGORIES[0]; }
 
@@ -636,7 +737,7 @@ let state = {
   fontSize:'md',
   ttsSpeaking:false,
   ttsRate:1,
-  theme:'light',            // 'light' | 'dark'
+  theme:'dark',             // 'dark'(기본) | 'light'
   calendarOffset:0,          // months from current month (mypage calendar)
   aiCache:{},               // { [articleId]: { easy:{ '1-2':{...} }, facts:{...}, quiz:{...} } }
   aiLoading:{},              // { 'articleId:type:level': true }
@@ -986,6 +1087,13 @@ function renderHeaderBits(){
         (c.id !== 'all' ? '<span class="dot"></span>' : '') + c.label + '<i>'+n+'</i></button>';
     }).join('');
   }
+  // 고른 분야 탭이 가려져 있으면 탭 줄을 옆으로 밀어 보여 줘요.
+  const curTab = gnb && gnb.querySelector('[aria-current="true"]');
+  if(curTab){
+    const l = curTab.offsetLeft - 12, r = curTab.offsetLeft + curTab.offsetWidth + 40;
+    if(l < gnb.scrollLeft) gnb.scrollLeft = l;
+    else if(r > gnb.scrollLeft + gnb.clientWidth) gnb.scrollLeft = r - gnb.clientWidth;
+  }
   const clearBtn = document.getElementById('clear-search-btn');
   if(clearBtn) clearBtn.hidden = !state.search;
 }
@@ -1038,7 +1146,7 @@ function renderNewsCard(a){
   const ci = catInfo(a.category);
   const bm = state.profile.bookmarks.includes(a.id);
   const read = isRead(a.id);
-  return '<article class="nc" data-action="go-article" data-id="'+a.id+'" data-read="'+(read?1:0)+'"'+catStyle(a.category)+'>' +
+  return '<article class="nc" tabindex="0" aria-label="'+escapeHtml(a.title)+' 기사 열기" data-action="go-article" data-id="'+a.id+'" data-read="'+(read?1:0)+'"'+catStyle(a.category)+'>' +
     '<div class="nc__top">' +
       '<span class="kick">'+ci.label+'</span><span class="lv">'+levelText(a.level)+'</span>' +
       (isNew(a) ? '<span class="new-tag">새 기사</span>' : '') +
@@ -1059,7 +1167,7 @@ function renderFeatured(){
   const dayNo = Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86400000);
   const pick = pool[dayNo % pool.length];
   const ci = catInfo(pick.category);
-  return '<article class="feat" data-action="go-article" data-id="'+pick.id+'"'+catStyle(pick.category)+'>' +
+  return '<article class="feat" tabindex="-1" data-action="go-article" data-id="'+pick.id+'"'+catStyle(pick.category)+'>' +
     '<span class="feat__k">오늘의 추천 기사</span>' +
     '<p class="feat__meta"><b>'+ci.label+'</b><span>'+escapeHtml(pick.source)+'</span><span>'+articleDate(pick, true)+'</span></p>' +
     '<h2>'+escapeHtml(pick.title)+'</h2>' +
@@ -1099,15 +1207,18 @@ function renderHome(){
 
   let body;
   if(!list.length){
-    body = '<div class="empty">'+ic('search') +
-      '<p><span class="sent">찾는 뉴스가 없어요.</span><span class="sent">다른 낱말로 찾아볼까요?</span></p>' +
-      '<button type="button" class="btn btn--line btn--sm" data-action="clear-search">전체 뉴스 보기</button></div>';
+    const msg = !ARTICLES.length ?
+      '<span class="sent">기사를 불러오지 못했어요.</span><span class="sent">잠시 뒤 새로고침해 주세요.</span>' :
+      isSearching ? '<span class="sent">찾는 뉴스가 없어요.</span><span class="sent">다른 낱말로 찾아볼까요?</span>' :
+      '<span class="sent">아직 이 분야 기사가 없어요.</span><span class="sent">매일 아침 새 기사가 올라와요.</span>';
+    body = '<div class="empty">'+ic(isSearching ? 'search' : 'paper') + '<p>'+msg+'</p>' +
+      (ARTICLES.length ? '<button type="button" class="btn btn--line btn--sm" data-action="clear-search">전체 뉴스 보기</button>' : '') + '</div>';
   } else {
     body = '<div class="grid">' + list.map(renderNewsCard).join('') + '</div>' +
       (remaining > 0 ? '<div class="more"><button type="button" class="btn btn--line" data-action="show-more">뉴스 더 보기 <span class="more__n">'+remaining+'개</span></button></div>' : '');
   }
 
-  const showTop = !isSearching && state.category === 'all';
+  const showTop = !isSearching && state.category === 'all' && ARTICLES.length > 0;
   return (showTop ?
     '<section class="wrap intro">' +
       '<p class="intro__k">초등학생을 위한 AI 뉴스 읽기</p>' +
@@ -1368,7 +1479,7 @@ function renderMyPage(){
     return '<div class="pr"'+catStyle(c.id)+'>' +
       '<span class="pr__n"><i></i>'+c.label+'</span>' +
       '<span class="bar"><i style="width:'+w+'%"></i></span>' +
-      '<span class="pr__t'+(tier.step === 4 ? ' is-top' : '')+'">'+tier.label+'</span>' +
+      '<span class="pr__t'+(tier.step === 4 ? ' is-top' : '')+'">'+(p.total ? tier.label : '기사 없음')+'</span>' +
       '<span class="pr__c"><b>'+p.read+'</b> / '+p.total+'</span>' +
     '</div>';
   }).join('');
@@ -1839,6 +1950,8 @@ function renderPractice(){
 ========================================================= */
 function renderApp(){
   document.documentElement.dataset.theme = state.theme;
+  const tc = document.querySelector('meta[name="theme-color"]');
+  if(tc) tc.setAttribute('content', state.theme === 'dark' ? '#09090B' : '#FAFAFB');
   const main = document.getElementById('main');
   if(state.view === 'article') main.innerHTML = renderArticleView(state.articleId);
   else if(state.view === 'mypage') main.innerHTML = renderMyPage();
@@ -1888,7 +2001,12 @@ function setWordStatus(word, mark){
   const before = state.profile.wordStatus[word];
   state.profile.wordStatus[word] = mark;
   saveProfile();
-  if(mark === 'known' && before !== 'known') addPoints(1, '낱말 하나를 외웠어요');
+  if(!state.profile.wordPointed) state.profile.wordPointed = {};
+  if(mark === 'known' && before !== 'known' && !state.profile.wordPointed[word]){
+    state.profile.wordPointed[word] = true;
+    saveProfile();
+    addPoints(1, '낱말 하나를 외웠어요');
+  }
 }
 
 function speakArticle(article){
@@ -2146,9 +2264,11 @@ document.addEventListener('input', function(e){
 });
 document.addEventListener('keydown', function(e){
   if(e.key === 'Escape' && state.wordPop){ state.wordPop = null; renderApp(); }
-  // 본문 밑줄 낱말은 키보드(Enter·Space)로도 열 수 있어요.
-  if((e.key === 'Enter' || e.key === ' ') && e.target && e.target.classList && e.target.classList.contains('w')){
-    e.preventDefault(); e.target.click();
+  // 밑줄 낱말·뉴스 카드처럼 단추가 아닌 곳도 키보드(Enter·Space)로 열 수 있어요.
+  const t = e.target;
+  if((e.key === 'Enter' || e.key === ' ') && t && t.getAttribute && t.getAttribute('data-action') && t.hasAttribute('tabindex') &&
+     ['BUTTON','A','INPUT','TEXTAREA','SUMMARY'].indexOf(t.tagName) === -1){
+    e.preventDefault(); t.click();
   }
 });
 

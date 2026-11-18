@@ -106,7 +106,7 @@ window.NEWS_DATA = {
     },
     {
       "id": "r1118-uigoksa",
-      "category": "culture",
+      "category": "history",
       "level": "3-6",
       "source": "뉴스핌",
       "date": "2026-11-18",
@@ -201,7 +201,7 @@ window.NEWS_DATA = {
     },
     {
       "id": "r1117-tagrugby",
-      "category": "kids",
+      "category": "sports",
       "level": "1-6",
       "source": "스타뉴스",
       "date": "2026-11-17",
@@ -296,7 +296,7 @@ window.NEWS_DATA = {
     },
     {
       "id": "r1117-antarctic",
-      "category": "science",
+      "category": "env",
       "level": "5-6",
       "source": "아시아경제",
       "date": "2026-11-17",
@@ -496,7 +496,7 @@ window.NEWS_DATA = {
     },
     {
       "id": "r1117-csat",
-      "category": "society",
+      "category": "school",
       "level": "5-6",
       "source": "전자신문",
       "date": "2026-11-17",
@@ -796,7 +796,7 @@ window.NEWS_DATA = {
     },
     {
       "id": "r1116-econbook",
-      "category": "economy",
+      "category": "school",
       "level": "1-6",
       "source": "중도일보",
       "date": "2026-11-16",
@@ -1196,7 +1196,7 @@ window.NEWS_DATA = {
     },
     {
       "id": "r1111-robot",
-      "category": "science",
+      "category": "tech",
       "level": "1-6",
       "source": "국제뉴스",
       "date": "2026-11-11",
@@ -1396,7 +1396,7 @@ window.NEWS_DATA = {
     },
     {
       "id": "r1108-cop31",
-      "category": "world",
+      "category": "env",
       "level": "5-6",
       "source": "경향신문",
       "date": "2026-11-08",
@@ -1596,7 +1596,7 @@ window.NEWS_DATA = {
     },
     {
       "id": "r1108-lions",
-      "category": "culture",
+      "category": "sports",
       "level": "1-6",
       "source": "뉴스1",
       "date": "2026-11-08",
@@ -1696,7 +1696,7 @@ window.NEWS_DATA = {
     },
     {
       "id": "r1108-snow",
-      "category": "society",
+      "category": "env",
       "level": "1-6",
       "source": "머니투데이",
       "date": "2026-11-08",
@@ -1796,7 +1796,7 @@ window.NEWS_DATA = {
     },
     {
       "id": "r1104-braille",
-      "category": "culture",
+      "category": "history",
       "level": "1-6",
       "source": "아시아경제",
       "date": "2026-11-04",
@@ -1992,7 +1992,7 @@ window.NEWS_DATA = {
     },
     {
       "id": "r1102-silla",
-      "category": "culture",
+      "category": "history",
       "level": "3-6",
       "source": "뉴스1",
       "date": "2026-11-02",
@@ -2192,7 +2192,7 @@ window.NEWS_DATA = {
     },
     {
       "id": "r1027-shubao",
-      "category": "kids",
+      "category": "nature",
       "level": "1-6",
       "source": "경향신문",
       "date": "2026-10-27",

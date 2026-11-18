@@ -14,7 +14,8 @@ const err = (id, msg) => errors.push(`[${id}] ${msg}`);
 const warn = (id, msg) => warnings.push(`[${id}] ${msg}`);
 
 // ---- 규칙 ----
-const CATEGORIES = ['science', 'society', 'economy', 'world', 'kids', 'culture'];
+// 분야: 과학·우주, IT·AI, 환경·날씨, 동물·자연, 사회, 교육, 경제, 세계, 어린이, 역사, 문화·예술, 스포츠
+const CATEGORIES = ['science', 'tech', 'env', 'nature', 'society', 'school', 'economy', 'world', 'kids', 'history', 'culture', 'sports'];
 const LEVELS = ['1-6', '3-6', '5-6'];
 const MAX_ARTICLES = 60;
 const FIRST_BATCH = '2026-11-17'; // 처음 한꺼번에 실은 기사들은 '3일 안' 규칙에서 빼요
