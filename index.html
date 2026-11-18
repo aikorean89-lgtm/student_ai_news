@@ -23,9 +23,12 @@
   --ok:#0B7A55;--ok-soft:#E3F8EF;--err:#C2343A;--err-soft:#FFEDEE;--think:#FFF7DD;
   --shadow:rgba(17,17,19,.10);
   --edge:inset 0 1px 0 rgba(255,255,255,.9);
-  --sh-1:0 1px 2px rgba(17,17,19,.05),0 2px 8px -4px rgba(17,17,19,.08);
-  --sh-2:0 2px 4px rgba(17,17,19,.04),0 16px 32px -16px rgba(17,17,19,.22);
-  --sh-3:0 4px 8px rgba(17,17,19,.05),0 24px 48px -20px rgba(17,17,19,.28);
+  --sh-1:0 1px 2px rgba(17,17,19,.06),0 3px 10px -4px rgba(17,17,19,.12);
+  --sh-2:0 2px 4px rgba(17,17,19,.05),0 14px 28px -12px rgba(17,17,19,.22),0 30px 56px -28px rgba(17,17,19,.18);
+  --sh-3:0 4px 8px rgba(17,17,19,.05),0 24px 48px -20px rgba(17,17,19,.30);
+  /* 카드(뉴스·타일·상자) 전용 음영: 가까운 그림자 + 넓게 퍼지는 그림자 두 겹 */
+  --sh-card:0 1px 2px rgba(17,17,19,.07),0 6px 16px -6px rgba(17,17,19,.16),0 18px 36px -22px rgba(17,17,19,.24);
+  --sh-card-h:0 2px 6px rgba(17,17,19,.07),0 18px 32px -12px rgba(17,17,19,.26),0 36px 60px -30px rgba(17,17,19,.28);
   --glow:.42;
   --c-science:#2563EB;--c-tech:#4F46E5;--c-env:#0F766E;--c-nature:#4D7C0F;--c-society:#C2410C;--c-school:#0369A1;
   --c-economy:#A16207;--c-world:#0E7490;--c-kids:#BE185D;--c-history:#8B5E34;--c-culture:#7C3AED;--c-sports:#DC2626;
@@ -35,15 +38,17 @@
 }
 [data-theme=dark]{
   --ink:#F4F4F6;--ink-2:#B3B3BC;--ink-3:#868690;--line:#26262B;--line-2:#34343A;--bg:#18181C;
-  --page:#09090B;--surface:#121215;--surface-2:#16161A;--surface-hover:#212126;--hd-bg:rgba(9,9,11,.82);
+  --page:#09090B;--surface:#121215;--surface-2:#18181D;--surface-hover:#212126;--hd-bg:rgba(9,9,11,.82);
   --main:#7C9BFF;--main-d:#9AB2FF;--main-soft:#151B2E;--on-main:#0B1230;
   --fact:#5FD3A6;--fact-soft:#0F2A20;--opinion:#FF9F6B;--opinion-soft:#2E1B10;
   --ok:#62D8A8;--ok-soft:#12352C;--err:#FF8C95;--err-soft:#3A1A20;--think:#262111;
   --shadow:rgba(0,0,0,.6);
-  --edge:inset 0 1px 0 rgba(255,255,255,.05);
-  --sh-1:0 1px 2px rgba(0,0,0,.5),0 2px 10px -4px rgba(0,0,0,.6);
-  --sh-2:0 2px 4px rgba(0,0,0,.45),0 18px 36px -16px rgba(0,0,0,.85);
-  --sh-3:0 4px 10px rgba(0,0,0,.5),0 28px 56px -20px rgba(0,0,0,.9);
+  --edge:inset 0 1px 0 rgba(255,255,255,.07);
+  --sh-1:0 1px 2px rgba(0,0,0,.55),0 4px 12px -4px rgba(0,0,0,.65);
+  --sh-2:0 2px 4px rgba(0,0,0,.5),0 18px 36px -14px rgba(0,0,0,.9);
+  --sh-3:0 4px 10px rgba(0,0,0,.5),0 28px 56px -20px rgba(0,0,0,.95);
+  --sh-card:0 0 0 1px rgba(255,255,255,.02),0 1px 2px rgba(0,0,0,.6),0 8px 18px -6px rgba(0,0,0,.8),0 22px 40px -22px rgba(0,0,0,.95);
+  --sh-card-h:0 0 0 1px rgba(255,255,255,.04),0 2px 6px rgba(0,0,0,.6),0 20px 36px -12px rgba(0,0,0,.9),0 40px 64px -30px rgba(0,0,0,1);
   --glow:.5;
   --c-science:#82A8FF;--c-tech:#A5A3FF;--c-env:#4FD1C5;--c-nature:#A3D65C;--c-society:#FF9F5A;--c-school:#6CC3F2;
   --c-economy:#E8C24D;--c-world:#5CC8DC;--c-kids:#FF8FC0;--c-history:#D9A877;--c-culture:#C4A6FF;--c-sports:#FF7B7B;
@@ -360,7 +365,7 @@ mark{padding:0 2px;border-radius:4px;background:var(--main-soft);color:inherit;f
 .sec__more{display:inline-flex;align-items:center;gap:2px;flex:none;padding:0;border:0;background:none;font-size:14px;font-weight:700;color:var(--ink-2)}
 .sec__more:hover{color:var(--ink)}
 .sec__more .ic{width:16px;height:16px}
-.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
 .tile{display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:20px;border:1.5px solid var(--line);border-radius:var(--r);background:var(--surface);text-align:left;transition:border-color .15s,transform .15s}
 .tile:hover{border-color:var(--ink-3);transform:translateY(-2px)}
 .tile .mtab__i{margin-bottom:6px}
@@ -542,6 +547,95 @@ body{background:
 .nc:hover{transform:none}
 @media(hover:hover){.nc:hover{transform:translateY(-4px)}}
 
+/* ---------- 카드 음영 더 짙게 (뉴스 카드·공부방 타일·학습 활동 탭) ---------- */
+.nc{background:linear-gradient(180deg,color-mix(in srgb,var(--cc) 5%,var(--surface-2)) 0,var(--surface) 64%);box-shadow:var(--edge),var(--sh-card),0 16px 30px -24px color-mix(in srgb,var(--cc) 70%,transparent)}
+.mtab,.tile{box-shadow:var(--edge),var(--sh-card)}
+.mycard,.feat{box-shadow:var(--edge),var(--sh-card-h)}
+.stat,.wl__i,.foq,.wn__c,.cal{box-shadow:var(--edge),var(--sh-card)}
+@media(hover:hover){
+  .nc:hover{transform:translateY(-5px);box-shadow:var(--edge),var(--sh-card-h),0 22px 40px -24px color-mix(in srgb,var(--cc) 90%,transparent)}
+  .mtab:hover,.tile:hover{box-shadow:var(--edge),var(--sh-card-h)}
+}
+.nc:active,.tile:active,.mtab:active{transform:translateY(-1px) scale(.995)}
+
+/* ---------- 더 많은 기능: 오늘의 공부 · 학년별 보기 · 분야 둘러보기 · 배지 · 다음 기사 ---------- */
+.box{display:flex;flex-direction:column;gap:12px;min-width:0;padding:22px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(180deg,var(--surface-2),var(--surface));box-shadow:var(--edge),var(--sh-card)}
+.box__h{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:24px}
+.box__k{font-size:13px;font-weight:800;color:var(--main)}
+.box__d{font-size:13px;font-weight:700;color:var(--ink-3)}
+.today{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.ml{display:grid;gap:9px}
+.ml__i{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:600}
+.ml__ic{flex:none;width:30px;height:30px;border-radius:9px;background:var(--bg);display:grid;place-items:center;color:var(--ink-2);box-shadow:var(--edge),inset 0 0 0 1px var(--line)}
+.ml__ic .ic{width:16px;height:16px}
+.ml__t{flex:1;min-width:0}
+.ml__n{font-size:13px;font-weight:700;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.ml__i.is-ok .ml__ic{background:var(--ok-soft);color:var(--ok);box-shadow:none}
+.ml__i.is-ok .ml__t{color:var(--ink-3);text-decoration:line-through}
+.ml__i.is-ok .ml__n{color:var(--ok)}
+.ml__done{display:flex;align-items:center;justify-content:center;gap:6px;min-height:46px;margin-top:auto;border-radius:999px;background:var(--ok-soft);font-size:14.5px;font-weight:800;color:var(--ok)}
+.ml__done .ic{width:18px;height:18px}
+.box>.btn{margin-top:auto}
+.wod__w{font-size:30px;font-weight:800;letter-spacing:-.035em;line-height:1.25}
+.wod__m{font-size:15.5px;font-weight:600;line-height:1.55}
+.wod__a{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto}
+.sod__t{font-size:16.5px;font-weight:800;line-height:1.55}
+.sod__b{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.opt--mid{justify-content:center;min-height:46px;font-size:16px;font-weight:800}
+.sod__r{font-size:14px;color:var(--ink-2)}
+.sod__r b{color:var(--ink)}
+.box__link{display:inline-flex;align-items:center;gap:6px;max-width:100%;margin-top:auto;padding:0;border:0;background:none;font-size:13px;color:var(--ink-3);text-align:left}
+.box__link span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.box__link .ic{width:15px;height:15px}
+.box__link:hover{color:var(--ink);text-decoration:underline}
+.filters{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;margin:-4px 0 18px}
+.filters__g{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px}
+.chip{display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 15px;border:0;border-radius:999px;background:var(--surface-2);box-shadow:inset 0 0 0 1.5px var(--line),var(--sh-1);font-size:14px;font-weight:700;color:var(--ink-2);transition:background .15s,color .15s,box-shadow .15s}
+.chip .ic{width:16px;height:16px;opacity:.35}
+.chip[aria-pressed=true]{background:var(--main-soft);color:var(--main);box-shadow:inset 0 0 0 1.5px var(--main),0 6px 16px -10px color-mix(in srgb,var(--main) 80%,transparent)}
+.chip[aria-pressed=true] .ic{opacity:1}
+.cats{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+.catc{display:flex;flex-direction:column;align-items:flex-start;gap:5px;min-width:0;padding:16px 16px 15px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,color-mix(in srgb,var(--cc) 9%,var(--surface-2)),var(--surface));text-align:left;box-shadow:var(--edge),var(--sh-card);transition:transform .2s,box-shadow .2s,border-color .2s}
+.catc[aria-current=true]{border-color:color-mix(in srgb,var(--cc) 60%,var(--line));box-shadow:var(--edge),var(--sh-card),0 0 0 3px color-mix(in srgb,var(--cc) 18%,transparent)}
+.catc__h{display:flex;align-items:center;gap:8px}
+.catc__h i{width:8px;height:8px;border-radius:50%;background:var(--cc);box-shadow:0 0 0 3px color-mix(in srgb,var(--cc) 22%,transparent)}
+.catc__h b{font-size:15.5px;font-weight:800;letter-spacing:-.02em;white-space:nowrap}
+.catc__n{font-size:12.5px;font-weight:600;color:var(--ink-3);white-space:nowrap}
+.catc .bar{width:100%;height:6px;margin-top:5px}
+.catc .bar>i{background:var(--cc);box-shadow:none}
+.intro__k--cat{color:var(--cc)}
+.badges{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
+.bdg{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:0;padding:18px 10px 14px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,var(--surface-2),var(--surface));text-align:center;box-shadow:var(--edge),var(--sh-card)}
+.bdg__i{display:grid;place-items:center;width:54px;height:54px;margin-bottom:8px;border-radius:50%;background:var(--bg);font-size:27px;line-height:1;filter:grayscale(1);opacity:.4}
+.bdg b{font-size:14.5px;font-weight:800;letter-spacing:-.02em}
+.bdg small{max-width:100%;font-size:12.5px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bdg__s{margin-top:8px;padding:2px 9px;border-radius:6px;background:var(--bg);font-size:11.5px;font-weight:800;color:var(--ink-3)}
+.bdg.is-on{border-color:color-mix(in srgb,var(--main) 38%,var(--line))}
+.bdg.is-on .bdg__i{filter:none;opacity:1;background:var(--main-soft);box-shadow:0 0 0 4px color-mix(in srgb,var(--main) 12%,transparent)}
+.bdg.is-on .bdg__s{background:var(--main-soft);color:var(--main)}
+.art__bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 12px;margin-bottom:22px}
+.art__bar .crumb{margin-bottom:0}
+.art__acts{display:flex;flex-wrap:wrap;gap:6px}
+.rel{display:grid;gap:10px}
+.rel__i{display:flex;align-items:center;gap:14px;width:100%;min-width:0;padding:16px 18px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,color-mix(in srgb,var(--cc) 5%,var(--surface-2)),var(--surface));text-align:left;box-shadow:var(--edge),var(--sh-card);transition:transform .2s,box-shadow .2s,border-color .2s}
+.rel__i .kick{flex:none}
+.rel__t{flex:1;min-width:0}
+.rel__t b{display:block;font-size:16px;font-weight:800;letter-spacing:-.02em;line-height:1.45;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rel__t small{display:block;margin-top:1px;font-size:13px;color:var(--ink-3)}
+.rel__i>.ic{color:var(--ink-3)}
+.pq__p{margin:8px 0 12px;padding:16px 18px;border:1px solid var(--line);border-radius:14px;background:var(--bg);font-size:17px;font-weight:500;line-height:1.8;box-shadow:var(--edge)}
+.pq__go{margin-top:12px}
+.ft__name{padding:0;border:0;background:none;text-align:left}
+.ft__name:hover{text-decoration:underline}
+#print-root{display:none}
+@media(hover:hover){
+  .catc:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--cc) 45%,var(--line));box-shadow:var(--edge),var(--sh-card-h),0 14px 28px -18px color-mix(in srgb,var(--cc) 85%,transparent)}
+  .rel__i:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--cc) 45%,var(--line));box-shadow:var(--edge),var(--sh-card-h)}
+  .chip:hover{color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink-3),var(--sh-2)}
+  .bdg.is-on:hover{transform:translateY(-2px);box-shadow:var(--edge),var(--sh-card-h)}
+}
+.bdg{transition:transform .2s,box-shadow .2s}
+
 @media(max-width:1080px){
   .gnb .wrap{padding-right:32px;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 36px),transparent)}
 }
@@ -549,6 +643,11 @@ body{background:
   .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .top{grid-template-columns:1fr}
   .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .today{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .today>:last-child{grid-column:1/-1}
+  .cats{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .badges{grid-template-columns:repeat(4,minmax(0,1fr))}
 }
 @media(max-width:720px){
   .wrap{padding-inline:16px}
@@ -607,6 +706,58 @@ body{background:
   .fc__face{min-height:250px;padding:26px 18px}
   .fc__w{font-size:32px}
   .pq__t{font-size:18.5px}
+  /* 오늘의 공부: 휴대폰에서는 옆으로 밀어 보는 카드 */
+  .today{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:86%;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -16px;padding:4px 16px 22px;scroll-padding-inline:16px;scrollbar-width:none}
+  .today::-webkit-scrollbar{display:none}
+  .today>*{scroll-snap-align:start}
+  .today>:last-child{grid-column:auto}
+  .box{padding:20px 18px}
+  .wod__w{font-size:26px}
+  .filters{margin-top:-6px}
+  .filters .seg button{padding:0 10px}
+  .chip{height:38px}
+  .cats{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .catc{padding:14px 14px 13px}
+  .badges{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .art__bar{margin-bottom:18px}
+  .rel__i{flex-direction:column;align-items:flex-start;gap:8px;padding:15px 16px}
+  .rel__i>.ic{display:none}
+  .rel__t b{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+  .pq__p{font-size:16px;padding:14px 15px}
+}
+
+/* ---------- 인쇄: 학습지 단추를 누르면 학습지만, 그냥 인쇄하면 기사 본문만 ---------- */
+@media print{
+  @page{size:A4;margin:14mm 14mm 16mm}
+  :root,[data-theme]{color-scheme:light!important}
+  html,body{background:#fff!important;color:#000!important}
+  .hd,.ft,.toasts,#modal-root,.tools,.helper,.art__acts,.crumb,.verify .btn{display:none!important}
+  .art{max-width:none;padding:0}
+  .verify{box-shadow:none;border:1px solid #999}
+  body.is-printing>*:not(#print-root){display:none!important}
+  body.is-printing #print-root{display:block}
+  .ws,.ws *{color:#000!important;background:none!important;box-shadow:none!important;-webkit-text-fill-color:#000}
+  .ws{font:11.5pt/1.65 var(--sans)}
+  .ws__h{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:6px 16px;padding-bottom:8px;border-bottom:2px solid #000;font-size:10pt}
+  .ws__h b{font-weight:800}
+  .ws__k{margin-top:14px;font-size:9.5pt;font-weight:700}
+  .ws h1{margin-top:2px;font-size:18pt;font-weight:800;letter-spacing:-.03em;line-height:1.35}
+  .ws__src{margin-top:4px;font-size:9pt}
+  .ws__body{margin-top:12px;padding:12px 14px;border:1px solid #888;border-radius:8px}
+  .ws__body p+p{margin-top:8px}
+  .ws section{break-inside:avoid}
+  .ws h2{margin:16px 0 7px;font-size:12pt;font-weight:800}
+  .ws table{width:100%;border-collapse:collapse;font-size:10.5pt}
+  .ws th,.ws td{padding:6px 8px;border:1px solid #888;text-align:left;vertical-align:top}
+  .ws tbody th{width:20%;white-space:nowrap}
+  .ws__fo th:nth-child(n+2),.ws__fo td:nth-child(n+2){width:11%;text-align:center}
+  .ws__q{margin-bottom:9px;break-inside:avoid}
+  .ws__q>p:first-child{font-weight:700}
+  .ws__opts{display:flex;flex-wrap:wrap;gap:2px 18px;margin-top:2px}
+  .ws__hint{margin-top:3px;font-size:9.5pt}
+  .ws__lines span{display:block;height:30px;border-bottom:1px solid #888}
+  .ws__key{break-before:page}
+  .ws__key p{margin-top:6px}
 }
 </style>
 </head>
@@ -636,11 +787,12 @@ body{background:
 
 <footer class="ft">
   <div class="wrap">
-    <p class="ft__name">AI 어린이 뉴스 연구소</p>
+    <p><button type="button" class="ft__name" data-action="go-home">AI 어린이 뉴스 연구소</button></p>
     <p>
       <span class="sent">뉴스를 읽는 힘을 기르는 초등학생 학습 사이트예요.</span>
       <span class="sent">기사는 실제 신문 기사를 어린이가 읽기 쉽게 짧게 정리한 글이고, 언론사·보도 날짜·원문 링크를 함께 적어 두었어요.</span>
-      <span class="sent">'쉽게 읽기', '사실과 의견', '탐정 퀴즈'는 AI가 만들어요.</span>
+      <span class="sent">선생님은 기사마다 '학습지 인쇄'로 수업용 학습지를 뽑을 수 있어요.</span>
+      <span class="sent">'AI 쉽게 읽기'와 'AI 문장 분석'은 AI가 만들어요.</span>
       <span class="sent">AI도 실수할 수 있으니 어른과 함께 이야기 나눠 보세요.</span>
     </p>
   </div>
@@ -648,6 +800,7 @@ body{background:
 
 <div class="toasts" id="toast-container" aria-live="polite"></div>
 <div id="modal-root"></div>
+<div id="print-root" aria-hidden="true"></div>
 
 <script src="data/articles.js"></script>
 <script>
@@ -659,18 +812,18 @@ body{background:
 ========================================================= */
 const CATEGORIES = [
   {id:'all',     label:'전체'},
-  {id:'science', label:'과학·우주'},
-  {id:'tech',    label:'IT·AI'},
-  {id:'env',     label:'환경·날씨'},
-  {id:'nature',  label:'동물·자연'},
-  {id:'society', label:'사회'},
-  {id:'school',  label:'교육'},
-  {id:'economy', label:'경제'},
-  {id:'world',   label:'세계'},
-  {id:'kids',    label:'어린이'},
-  {id:'history', label:'역사'},
-  {id:'culture', label:'문화·예술'},
-  {id:'sports',  label:'스포츠'},
+  {id:'science', label:'과학·우주', desc:'우주 탐사, 천문 현상, 과학 발견'},
+  {id:'tech',    label:'IT·AI',     desc:'인공지능, 로봇, 디지털 기술'},
+  {id:'env',     label:'환경·날씨', desc:'기후, 날씨, 환경 보호'},
+  {id:'nature',  label:'동물·자연', desc:'동물, 식물, 자연 생태'},
+  {id:'society', label:'사회',      desc:'생활, 인구, 안전, 지역'},
+  {id:'school',  label:'교육',      desc:'학교, 교육 정책, 배움 활동'},
+  {id:'economy', label:'경제',      desc:'물가, 돈, 기업과 소비'},
+  {id:'world',   label:'세계',      desc:'다른 나라, 국제 협력'},
+  {id:'kids',    label:'어린이',    desc:'어린이 권리, 어린이 행사'},
+  {id:'history', label:'역사',      desc:'문화유산, 발굴, 역사 이야기'},
+  {id:'culture', label:'문화·예술', desc:'책, 영화, 음악, 공연, 전시'},
+  {id:'sports',  label:'스포츠',    desc:'경기, 선수의 도전과 기록'},
 ];
 function catInfo(id){ return CATEGORIES.find(c=>c.id===id) || CATEGORIES[0]; }
 
@@ -763,6 +916,7 @@ let state = {
   thinkDraft:{},             // { articleId: '쓰는 중인 글' }
   wordPop:null,              // 본문 밑줄 낱말을 눌렀을 때 보여 줄 뜻
   badgeQueue:[],
+  unreadOnly:false,          // '안 읽은 뉴스만' 보기
 };
 
 const FONT_SIZES = {sm:'15px', md:'17px', lg:'19px', xl:'21px'};
@@ -809,8 +963,11 @@ async function loadProfile(){
     points:0, bookmarks:[], readArticles:[], quizResults:{},
     streak:{count:0, lastDate:null}, masteredCategories:[], vocabNotebook:[],
     wrongAnswers:[], readDates:[],
-    wordStatus:{}, foResults:{}, thoughts:{}, actDone:{}, practiceBest:{}, practiceDay:{}
+    wordStatus:{}, foResults:{}, thoughts:{}, actDone:{}, practiceBest:{}, practiceDay:{},
+    achievements:[], missionDays:0, bestStreak:0, grade:''
   }, p);
+  // 학년을 골라 두었으면 'AI 쉽게 읽기'도 그 학년 눈높이로 시작해요.
+  if(LEVELS.some(function(l){ return l.id === state.profile.grade; })) state.level = state.profile.grade;
   const cache = await storageGet(AI_CACHE_KEY);
   if(cache && typeof cache === 'object') state.aiCache = cache;
   const settings = await storageGet('settings');
@@ -884,6 +1041,7 @@ function updateStreak(){
   if(s.lastDate === t) return;
   s.count = (s.lastDate === yesterdayStr()) ? s.count + 1 : 1;
   s.lastDate = t;
+  state.profile.bestStreak = Math.max(state.profile.bestStreak || 0, s.count);
   if(!state.profile.readDates) state.profile.readDates = [];
   if(state.profile.readDates.indexOf(t) === -1) state.profile.readDates.push(t);
   saveProfile();
@@ -926,6 +1084,7 @@ function checkCategoryMastery(category){
 
 function markRead(articleId){
   updateStreak();
+  bumpDaily('read', articleId);
   if(state.profile.readArticles.indexOf(articleId) === -1){
     state.profile.readArticles.push(articleId);
     addPoints(10, '기사를 읽었어요');
@@ -1056,6 +1215,9 @@ const IC = {
   cards:'M8 4h10.5A1.5 1.5 0 0 1 20 5.5V17M4.5 7.5h11V20h-11z',
   target:'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 16.5a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9zM12 12.01V12',
   close:'M6 6l12 12M18 6L6 18',
+  link:'M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1',
+  print:'M7 8V3.5h10V8M7 17H5a1.5 1.5 0 0 1-1.5-1.5v-6A1.5 1.5 0 0 1 5 8h14a1.5 1.5 0 0 1 1.5 1.5v6A1.5 1.5 0 0 1 19 17h-2M7 13.5h10v7H7z',
+  title:'M4 6h16M4 11h10M4 16h7M16.5 14.5l2 2 3.5-4',
 };
 function ic(name){
   return '<svg viewBox="0 0 24 24" class="ic" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="'+IC[name]+'"/></svg>';
@@ -1135,10 +1297,11 @@ function isRead(id){ return state.profile.readArticles.indexOf(id) !== -1; }
 ========================================================= */
 function filteredArticles(){
   const q = state.search.trim().toLowerCase();
+  const grade = state.profile.grade || '';
   return ARTICLES.filter(function(a){
     const catOk = state.category === 'all' || a.category === state.category;
     const searchOk = !q || a.title.toLowerCase().includes(q) || a.excerpt.toLowerCase().includes(q) || a.body.toLowerCase().includes(q) || (a.source||'').toLowerCase().includes(q);
-    return catOk && searchOk;
+    return catOk && searchOk && suits(a, grade) && (!state.unreadOnly || !isRead(a.id));
   });
 }
 
@@ -1190,6 +1353,7 @@ function renderMyCard(){
       '<div><dt>읽은 기사</dt><dd>'+readN+' / '+ARTICLES.length+'</dd></div>' +
       '<div><dt>연속 출석</dt><dd>'+streak+'일</dd></div>' +
       '<div><dt>외운 낱말</dt><dd>'+knownN+' / '+bank.length+'</dd></div>' +
+      '<div><dt>모은 배지</dt><dd>'+(state.profile.achievements || []).length+' / '+ACHIEVEMENTS.length+'</dd></div>' +
     '</dl>' +
     '<button type="button" class="btn btn--line btn--full" data-action="go-mypage">수첩 열기</button>' +
   '</aside>';
@@ -1204,35 +1368,52 @@ function renderHome(){
   const readCount = all.filter(function(a){ return isRead(a.id); }).length;
   const ci = catInfo(state.category);
   const title = isSearching ? '“'+escapeHtml(q)+'” 검색 결과' : (state.category === 'all' ? '전체 뉴스' : ci.label+' 뉴스');
+  const filtered = !!(state.profile.grade || state.unreadOnly);
 
   let body;
   if(!list.length){
     const msg = !ARTICLES.length ?
       '<span class="sent">기사를 불러오지 못했어요.</span><span class="sent">잠시 뒤 새로고침해 주세요.</span>' :
+      filtered ? '<span class="sent">고른 조건에 맞는 뉴스가 없어요.</span><span class="sent">모든 뉴스를 볼까요?</span>' :
       isSearching ? '<span class="sent">찾는 뉴스가 없어요.</span><span class="sent">다른 낱말로 찾아볼까요?</span>' :
       '<span class="sent">아직 이 분야 기사가 없어요.</span><span class="sent">매일 아침 새 기사가 올라와요.</span>';
     body = '<div class="empty">'+ic(isSearching ? 'search' : 'paper') + '<p>'+msg+'</p>' +
-      (ARTICLES.length ? '<button type="button" class="btn btn--line btn--sm" data-action="clear-search">전체 뉴스 보기</button>' : '') + '</div>';
+      (ARTICLES.length ? '<button type="button" class="btn btn--line btn--sm" data-action="'+(filtered ? 'clear-filters' : 'clear-search')+'">'+(filtered ? '모든 뉴스 보기' : '전체 뉴스 보기')+'</button>' : '') + '</div>';
   } else {
     body = '<div class="grid">' + list.map(renderNewsCard).join('') + '</div>' +
       (remaining > 0 ? '<div class="more"><button type="button" class="btn btn--line" data-action="show-more">뉴스 더 보기 <span class="more__n">'+remaining+'개</span></button></div>' : '');
   }
 
-  const showTop = !isSearching && state.category === 'all' && ARTICLES.length > 0;
-  return (showTop ?
-    '<section class="wrap intro">' +
+  const news = '<section class="wrap sec" id="news">' +
+    '<div class="sec__h"><h2>'+title+' <small>'+all.length+'개</small></h2>' +
+      (all.length ? '<span class="sec__r">읽은 뉴스 <b>'+readCount+'</b> / '+all.length+'</span>' : '') + '</div>' +
+    (ARTICLES.length ? renderFilters() : '') +
+    body +
+  '</section>';
+  const explore = function(h){
+    return '<section class="wrap sec"><div class="sec__h"><h2>'+h+'</h2><span class="sec__r">'+(CATEGORIES.length - 1)+'개 분야</span></div>'+renderCatExplore()+'</section>';
+  };
+
+  if(isSearching || !ARTICLES.length) return news;
+  if(state.category !== 'all'){
+    return '<section class="wrap intro"'+catStyle(state.category)+'>' +
+        '<p class="intro__k intro__k--cat">분야별 뉴스</p>' +
+        '<h1>'+ci.label+'</h1>' +
+        '<p class="intro__line">'+escapeHtml(ci.desc || '')+' 소식을 모았어요.</p>' +
+      '</section>' +
+      news + explore('다른 분야 둘러보기');
+  }
+  return '<section class="wrap intro">' +
       '<p class="intro__k">초등학생을 위한 AI 뉴스 읽기</p>' +
       '<h1>AI 어린이 뉴스 연구소</h1>' +
       '<p class="intro__line"><span class="clause">기사를 눈높이에 맞게 쉽게 설명해 주고,</span> <span class="clause">사실과 의견을 스스로 구별하는 힘을 길러 줘요.</span></p>' +
       renderUpdateLine() +
     '</section>' +
     '<section class="wrap top">'+renderFeatured()+renderMyCard()+'</section>' +
-    '<section class="wrap sec"><div class="sec__h"><h2>공부방</h2><button type="button" class="sec__more" data-action="go-study">공부방 가기'+ic('right')+'</button></div>'+renderStudyTiles()+'</section>' : '') +
-  '<section class="wrap sec">' +
-    '<div class="sec__h"><h2>'+title+' <small>'+all.length+'개</small></h2>' +
-      (all.length ? '<span class="sec__r">읽은 뉴스 <b>'+readCount+'</b> / '+all.length+'</span>' : '') + '</div>' +
-    body +
-  '</section>';
+    renderToday() +
+    news +
+    '<section class="wrap sec"><div class="sec__h"><h2>공부방</h2><button type="button" class="sec__more" data-action="go-study">공부방 가기'+ic('right')+'</button></div>'+renderStudyTiles()+'</section>' +
+    explore('분야 둘러보기');
 }
 
 /* =========================================================
@@ -1430,7 +1611,14 @@ function renderArticleView(id){
   const rates = [[0.8,'느리게'],[1,'보통'],[1.2,'빠르게']];
   const sizes = [['sm','14px'],['md','15px'],['lg','17px'],['xl','19px']];
   return '<article class="art"'+catStyle(article.category)+'>' +
-    '<nav class="crumb" aria-label="현재 위치"><button type="button" data-action="go-home">뉴스</button><button type="button" data-action="set-category" data-cat="'+article.category+'">'+ci.label+'</button></nav>' +
+    '<div class="art__bar">' +
+      '<nav class="crumb" aria-label="현재 위치"><button type="button" data-action="go-home">뉴스</button><button type="button" data-action="set-category" data-cat="'+article.category+'">'+ci.label+'</button></nav>' +
+      '<div class="art__acts">' +
+        '<button type="button" class="btn btn--line btn--sm bm-btn" data-action="toggle-bookmark" data-id="'+article.id+'" aria-pressed="'+bm+'">'+ic('bookmark')+(bm ? '스크랩함' : '스크랩')+'</button>' +
+        '<button type="button" class="btn btn--line btn--sm" data-action="copy-link" data-id="'+article.id+'">'+ic('link')+'링크 복사</button>' +
+        '<button type="button" class="btn btn--line btn--sm" data-action="print-ws" data-id="'+article.id+'">'+ic('print')+'학습지 인쇄</button>' +
+      '</div>' +
+    '</div>' +
     '<p class="art__k">'+ci.label+'</p>' +
     '<h1>'+escapeHtml(article.title)+'</h1>' +
     '<div class="art__meta">' +
@@ -1438,7 +1626,6 @@ function renderArticleView(id){
       '<span>'+ic('cal')+articleDate(article, true)+' 보도</span>' +
       '<span>'+ic('clock')+readMinutes(article)+'분이면 읽어요</span>' +
       '<span>'+ic('target')+levelText(article.level, true)+'</span>' +
-      '<button type="button" class="btn btn--line btn--sm bm-btn" data-action="toggle-bookmark" data-id="'+article.id+'" aria-pressed="'+bm+'">'+ic('bookmark')+(bm ? '스크랩함' : '스크랩')+'</button>' +
     '</div>' +
     '<div class="tools">' +
       '<div class="tool"><span class="tool__l">읽어 주기</span><button type="button" class="btn btn--sm'+(state.ttsSpeaking ? ' btn--ink' : '')+'" data-action="tts-toggle">'+ic(state.ttsSpeaking ? 'stop' : 'speaker')+(state.ttsSpeaking ? '멈추기' : '듣기')+'</button></div>' +
@@ -1453,6 +1640,7 @@ function renderArticleView(id){
     renderVerifyBox(article) +
     renderActivities(article) +
     renderHelper(article) +
+    renderRelated(article) +
   '</article>';
 }
 
@@ -1543,6 +1731,7 @@ function renderMyPage(){
       '<div class="stat"><b'+(total ? '' : ' class="muted"')+'>'+(total ? Math.round(correct/total*100)+'%' : '–')+'</b><span>퀴즈 정답률</span></div>' +
       '<div class="stat"><b>'+streak+'일</b><span>연속 출석</span></div>' +
     '</div>' +
+    '<section class="sec"><div class="sec__h"><h2>배지 모음 <small>'+(state.profile.achievements || []).length+' / '+ACHIEVEMENTS.length+'</small></h2><span class="sec__r">기사 읽기·낱말·퀴즈·미션으로 모아요</span></div>'+renderBadges()+'</section>' +
     sec('분야별 읽기', null, '<div>'+progRows+'</div>') +
     sec('탐정 등급', null, '<div>'+rankRows+'</div>') +
     sec('읽기 달력', null, renderCalendar()) +
@@ -1788,9 +1977,10 @@ function renderStudyTiles(){
   const known = bank.filter(function(w){ return wordStatus(w.word) === 'known'; }).length;
   const best = state.profile.practiceBest || {};
   const tiles = [
-    {mode:'cards',    icon:'cards', title:'낱말 카드',      desc:'뜻을 떠올리며 넘겨 봐요',   meta:'외운 낱말 '+known+' / '+bank.length},
-    {mode:'wordquiz', icon:'book',  title:'낱말 퀴즈',      desc:'뜻에 맞는 낱말을 골라요',   meta:best.wordquiz != null ? '최고 기록 '+best.wordquiz+' / 10' : '아직 기록이 없어요'},
-    {mode:'fo',       icon:'scale', title:'사실·의견 연습', desc:'문장을 사실과 의견으로 나눠요', meta:best.fo != null ? '최고 기록 '+best.fo+' / 10' : '아직 기록이 없어요'},
+    {mode:'cards',    icon:'cards', title:'낱말 카드',      desc:'뜻을 떠올리며 넘겨요',  meta:'외운 낱말 '+known+' / '+bank.length},
+    {mode:'wordquiz', icon:'book',  title:'낱말 퀴즈',      desc:'뜻에 맞는 낱말을 골라요', meta:best.wordquiz != null ? '최고 기록 '+best.wordquiz+' / 10' : '아직 기록이 없어요'},
+    {mode:'fo',       icon:'scale', title:'사실·의견 연습', desc:'사실과 의견으로 나눠요',  meta:best.fo != null ? '최고 기록 '+best.fo+' / 10' : '아직 기록이 없어요'},
+    {mode:'title',    icon:'title', title:'제목 맞히기',    desc:'알맞은 제목을 골라요',    meta:best.title != null ? '최고 기록 '+best.title+' / 10' : '아직 기록이 없어요'},
   ];
   return '<div class="tiles">' + tiles.map(function(t){
     return '<button type="button" class="tile" data-action="study-start" data-mode="'+t.mode+'">' +
@@ -1814,6 +2004,17 @@ function startPractice(mode){
     state.study = {mode:'fo', items:shuffle(allFoItems()).slice(0, 10), idx:0, picked:null, score:0, done:false};
   } else if(mode === 'cards'){
     state.study = {mode:'cards', filter:'all', idx:0, flipped:false};
+  } else if(mode === 'title'){
+    // 기사 첫 문단을 읽고 알맞은 제목(중심 내용)을 고르는 연습
+    if(ARTICLES.length < 4){ state.study = {mode:'title', items:[]}; return; }
+    const items = shuffle(ARTICLES).slice(0, 10).map(function(a){
+      const others = shuffle(ARTICLES.filter(function(x){ return x.id !== a.id; })).slice(0, 3).map(function(x){ return x.title; });
+      const options = shuffle(others.concat([a.title]));
+      const first = a.body.split(/\n\n+/)[0];
+      return {passage:splitSentences(first).slice(0, 3).join(' '), options:options, answer:options.indexOf(a.title),
+        id:a.id, source:a.source, date:a.date};
+    });
+    state.study = {mode:'title', items:items, idx:0, picked:null, score:0, done:false};
   } else {
     state.study = {mode:null};
   }
@@ -1831,7 +2032,7 @@ function studyCrumb(title){
 function renderStudy(){
   const s = state.study || {mode:null};
   if(s.mode === 'cards') return renderCards();
-  if(s.mode === 'wordquiz' || s.mode === 'fo') return renderPractice();
+  if(s.mode === 'wordquiz' || s.mode === 'fo' || s.mode === 'title') return renderPractice();
   return renderStudyHub();
 }
 function renderStudyHub(){
@@ -1841,8 +2042,8 @@ function renderStudyHub(){
   const pct = bank.length ? Math.round(known / bank.length * 100) : 0;
   return '<div class="mp">' +
     '<section class="mp__hero"><span class="av av--ic">'+ic('book')+'</span>' +
-      '<div class="mp__hi"><p class="mp__k">공부방</p><h1>낱말과 사실·의견 연습</h1>' +
-        '<p class="mp__p">기사에 나온 낱말 '+bank.length+'개와 문장 '+allFoItems().length+'개로 연습해요.</p>' +
+      '<div class="mp__hi"><p class="mp__k">공부방</p><h1>뉴스로 연습해요</h1>' +
+        '<p class="mp__p">기사 '+ARTICLES.length+'개에 나온 낱말 '+bank.length+'개와 문장 '+allFoItems().length+'개로 연습해요.</p>' +
         '<span class="bar"><i style="width:'+pct+'%"></i></span>' +
         '<p class="mp__p mp__p--s">외운 낱말 '+known+' / '+bank.length+'</p></div>' +
     '</section>' +
@@ -1898,7 +2099,7 @@ function renderCards(){
 function renderPractice(){
   const s = state.study;
   const isWq = s.mode === 'wordquiz';
-  const title = isWq ? '낱말 퀴즈' : '사실·의견 연습';
+  const title = PRACTICE_NAMES[s.mode] || '연습';
   if(!s.items || !s.items.length){
     return '<div class="mp">'+studyCrumb(title)+'<div class="empty">'+ic('book')+'<p>연습할 문제가 아직 없어요.</p></div></div>';
   }
@@ -1916,8 +2117,19 @@ function renderPractice(){
   const it = s.items[s.idx];
   const answered = s.picked !== null && s.picked !== undefined;
   let body;
-  if(isWq){
-    body = '<p class="pq__k">이 뜻을 가진 낱말은 무엇일까요?</p><p class="pq__t">'+escapeHtml(it.prompt)+'</p>' +
+  if(s.mode === 'title'){
+    body = '<p class="pq__k">이 기사에 가장 알맞은 제목은 무엇일까요?</p>' +
+      '<div class="pq__p">'+sentencesHtml(it.passage)+'</div>' +
+      '<p class="pq__src">'+ic('paper')+'<span>'+escapeHtml(it.source)+' · '+articleDate({date:it.date}, true, true)+' 보도</span></p>' +
+      '<div class="q__opts">' + it.options.map(function(o, i){
+        let attrs = 'data-selected="'+(s.picked === i ? 1 : 0)+'"';
+        if(answered){ if(i === it.answer) attrs += ' data-correct="1"'; else if(s.picked === i) attrs += ' data-wrong="1"'; }
+        return '<button type="button" class="opt" '+attrs+' '+(answered ? 'disabled' : 'data-action="pr-pick" data-i="'+i+'"')+'><span class="opt__l">'+(i + 1)+'</span><span>'+escapeHtml(o)+'</span></button>';
+      }).join('') + '</div>' +
+      (answered ? '<p class="q__ex"><b>'+(s.picked === it.answer ? '정답이에요.' : '정답은 '+(it.answer + 1)+'번이에요.')+'</b> 제목은 기사에서 가장 중요한 내용을 짧게 담고 있어요.</p>' +
+        '<button type="button" class="btn btn--line btn--sm pq__go" data-action="go-article" data-id="'+it.id+'">'+ic('paper')+'이 기사 읽어 보기</button>' : '');
+  } else if(isWq){
+    body ='<p class="pq__k">이 뜻을 가진 낱말은 무엇일까요?</p><p class="pq__t">'+escapeHtml(it.prompt)+'</p>' +
       '<div class="q__opts">' + it.options.map(function(o, i){
         let attrs = 'data-selected="'+(s.picked === i ? 1 : 0)+'"';
         if(answered){ if(i === it.answer) attrs += ' data-correct="1"'; else if(s.picked === i) attrs += ' data-wrong="1"'; }
@@ -1943,6 +2155,299 @@ function renderPractice(){
     '<div class="pq">'+body +
       (answered ? '<div class="qz__foot"><button type="button" class="btn btn--main" data-action="pr-next">'+(s.idx < s.items.length - 1 ? '다음 문제' : '결과 보기')+ic('right')+'</button></div>' : '') +
     '</div></div>';
+}
+
+/* =========================================================
+   MORE : 오늘의 공부 · 학년별 보기 · 분야 둘러보기 · 배지 · 다음 기사 · 링크 · 학습지
+========================================================= */
+const PRACTICE_NAMES = {wordquiz:'낱말 퀴즈', fo:'사실·의견 연습', title:'제목 맞히기'};
+function dayNumber(){
+  const d = new Date();
+  return Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86400000);
+}
+
+/* ---------- 오늘의 미션 (날마다 새로) ---------- */
+const MISSIONS = [
+  {k:'read',     n:1, icon:'paper', t:'기사 1개 읽기'},
+  {k:'words',    n:3, icon:'book',  t:'낱말 3개 외우기'},
+  {k:'practice', n:1, icon:'quiz',  t:'퀴즈나 연습 1번'},
+  {k:'think',    n:1, icon:'pen',   t:'생각 쓰기 1번'},
+];
+function dailyState(){
+  const t = todayStr();
+  const p = state.profile;
+  if(!p.daily || p.daily.date !== t) p.daily = {date:t, read:0, words:0, practice:0, think:0, readIds:[], wordList:[], claimed:false};
+  return p.daily;
+}
+function missionsDone(){
+  const d = dailyState();
+  return MISSIONS.filter(function(m){ return (d[m.k] || 0) >= m.n; }).length;
+}
+// key를 주면 같은 기사·같은 낱말은 하루에 한 번만 세요.
+function bumpDaily(k, key){
+  const d = dailyState();
+  if(key){
+    const list = k === 'read' ? (d.readIds || (d.readIds = [])) : (d.wordList || (d.wordList = []));
+    if(list.indexOf(key) !== -1) return;
+    list.push(key);
+  }
+  const before = missionsDone();
+  d[k] = (d[k] || 0) + 1;
+  saveProfile();
+  if(before < MISSIONS.length && missionsDone() === MISSIONS.length && !d.claimed){
+    setTimeout(function(){ toast('오늘의 미션을 모두 마쳤어요! 처음 화면에서 보상을 받아요', 3400); }, 900);
+  }
+}
+function renderMissions(){
+  const d = dailyState();
+  const done = missionsDone();
+  const all = done === MISSIONS.length;
+  return '<section class="box mission" aria-label="오늘의 미션">' +
+    '<div class="box__h"><p class="box__k">오늘의 미션</p><span class="box__d">'+done+' / '+MISSIONS.length+' 완료</span></div>' +
+    '<ul class="ml">' + MISSIONS.map(function(m){
+      const v = Math.min(d[m.k] || 0, m.n);
+      const ok = v >= m.n;
+      return '<li class="ml__i'+(ok ? ' is-ok' : '')+'"><span class="ml__ic">'+ic(ok ? 'check' : m.icon)+'</span>' +
+        '<span class="ml__t">'+m.t+'</span><span class="ml__n">'+v+' / '+m.n+'</span></li>';
+    }).join('') + '</ul>' +
+    '<span class="bar" role="progressbar" aria-label="오늘의 미션" aria-valuemin="0" aria-valuemax="'+MISSIONS.length+'" aria-valuenow="'+done+'"><i style="width:'+Math.round(done / MISSIONS.length * 100)+'%"></i></span>' +
+    (d.claimed ? '<p class="ml__done">'+ic('check')+'<span>보상을 받았어요. 내일 또 만나요!</span></p>' :
+      '<button type="button" class="btn '+(all ? 'btn--main' : 'btn--line')+' btn--full" data-action="mission-claim"'+(all ? '' : ' disabled')+'>'+(all ? '보상 받기 +10P' : '모두 마치면 +10P')+'</button>') +
+  '</section>';
+}
+
+/* ---------- 오늘의 낱말 ---------- */
+function wordOfDay(){
+  const bank = wordBank().filter(function(w){ return w.articleId; });
+  return bank.length ? bank[dayNumber() % bank.length] : null;
+}
+function renderWordOfDay(){
+  const w = wordOfDay();
+  if(!w) return '';
+  const known = wordStatus(w.word) === 'known';
+  const ew = escapeHtml(w.word);
+  return '<section class="box wod" aria-label="오늘의 낱말">' +
+    '<div class="box__h"><p class="box__k">오늘의 낱말</p>'+(known ? '<span class="wl__st">'+ic('check')+'외웠어요</span>' : '<span class="box__d">뜻을 알고 있나요?</span>')+'</div>' +
+    '<b class="wod__w">'+ew+'</b>' +
+    '<p class="wod__m">'+escapeHtml(w.meaning)+'</p>' +
+    (w.example ? '<p class="wl__ex">'+markOne(w.example, w.word)+'</p>' : '') +
+    '<div class="wod__a">' +
+      '<button type="button" class="btn btn--sm '+(known ? 'btn--main' : 'btn--line')+'" data-action="word-mark" data-word="'+ew+'" data-mark="known">'+ic('check')+(known ? '외웠어요' : '알아요')+'</button>' +
+      '<button type="button" class="btn btn--sm btn--line" data-action="go-article" data-id="'+w.articleId+'">'+ic('paper')+'나온 기사</button>' +
+    '</div>' +
+  '</section>';
+}
+
+/* ---------- 오늘의 문장 (사실일까, 의견일까?) ---------- */
+function sentenceOfDay(){
+  const items = allFoItems();
+  return items.length ? items[(dayNumber() * 7 + 3) % items.length] : null;
+}
+function renderSentenceOfDay(){
+  const it = sentenceOfDay();
+  if(!it) return '';
+  const d = dailyState();
+  const picked = d.foKey === it.text ? d.foPick : null;
+  const ok = picked === it.type;
+  const name = function(t){ return t === 'fact' ? '사실' : '의견'; };
+  return '<section class="box sod" aria-label="오늘의 문장">' +
+    '<div class="box__h"><p class="box__k">오늘의 문장</p><span class="box__d">사실일까, 의견일까?</span></div>' +
+    '<p class="sod__t">'+escapeHtml(it.text)+'</p>' +
+    '<div class="sod__b">' + ['fact','opinion'].map(function(t){
+      let attrs = '';
+      if(picked){ if(t === it.type) attrs = ' data-correct="1"'; else if(picked === t) attrs = ' data-wrong="1"'; }
+      return '<button type="button" class="opt opt--mid"'+attrs+' '+(picked ? 'disabled' : 'data-action="sod-pick" data-v="'+t+'"')+'>'+name(t)+'</button>';
+    }).join('') + '</div>' +
+    (picked ? '<p class="sod__r"><b>'+(ok ? '맞았어요.' : '정답은 '+name(it.type)+'이에요.')+'</b> '+escapeHtml(it.reason)+'</p>' :
+      '<p class="sod__r">고르면 정답과 까닭을 바로 알려 줘요.</p>') +
+    '<button type="button" class="box__link" data-action="go-article" data-id="'+it.id+'">'+ic('paper')+'<span>'+escapeHtml(it.from)+'</span></button>' +
+  '</section>';
+}
+function renderToday(){
+  return '<section class="wrap sec"><div class="sec__h"><h2>오늘의 공부</h2><span class="sec__r">'+articleDate({date:todayStr()})+'</span></div>' +
+    '<div class="today">'+renderMissions()+renderWordOfDay()+renderSentenceOfDay()+'</div></section>';
+}
+
+/* ---------- 학년별 보기 · 안 읽은 뉴스만 ---------- */
+const GRADES = [['', '모든 학년'], ['1-2', '1~2학년'], ['3-4', '3~4학년'], ['5-6', '5~6학년']];
+// 기사 추천 학년(1-6: 누구나, 3-6: 3학년 이상, 5-6: 5~6학년)이 고른 학년에 맞는지
+function suits(a, grade){
+  if(!grade) return true;
+  if(grade === '1-2') return a.level === '1-6';
+  if(grade === '3-4') return a.level === '1-6' || a.level === '3-6';
+  return true;
+}
+function renderFilters(){
+  const g = state.profile.grade || '';
+  return '<div class="filters">' +
+    '<div class="filters__g"><span class="tool__l">학년별 보기</span><div class="seg" role="group" aria-label="학년별로 보기">' + GRADES.map(function(x){
+      return '<button type="button" data-action="set-grade" data-grade="'+x[0]+'" aria-pressed="'+(g === x[0])+'">'+x[1]+'</button>';
+    }).join('') + '</div></div>' +
+    '<button type="button" class="chip" data-action="toggle-unread" aria-pressed="'+(!!state.unreadOnly)+'">'+ic('check')+'안 읽은 뉴스만</button>' +
+  '</div>';
+}
+
+/* ---------- 분야 둘러보기 ---------- */
+function renderCatExplore(){
+  const prog = categoryProgress();
+  return '<div class="cats">' + CATEGORIES.filter(function(c){ return c.id !== 'all'; }).map(function(c){
+    const p = prog[c.id];
+    const w = p.total ? Math.round(p.read / p.total * 100) : 0;
+    return '<button type="button" class="catc" data-action="set-category" data-cat="'+c.id+'" aria-current="'+(state.view === 'home' && state.category === c.id)+'"'+catStyle(c.id)+'>' +
+      '<span class="catc__h"><i></i><b>'+c.label+'</b></span>' +
+      '<span class="catc__n">'+(p.total ? '기사 '+p.total+'개 · 읽음 '+p.read : '기사 준비 중')+'</span>' +
+      '<span class="bar" aria-hidden="true"><i style="width:'+w+'%"></i></span></button>';
+  }).join('') + '</div>';
+}
+
+/* ---------- 배지 모음 ---------- */
+const ACHIEVEMENTS = [
+  {id:'read1',     icon:'📰', name:'첫 기사',     desc:'기사 1개 읽기'},
+  {id:'read10',    icon:'📚', name:'꾸준한 독자', desc:'기사 10개 읽기'},
+  {id:'read30',    icon:'🗞️', name:'뉴스 마니아', desc:'기사 30개 읽기'},
+  {id:'cats6',     icon:'🧭', name:'분야 탐험가', desc:'6개 분야 읽기'},
+  {id:'words10',   icon:'🔤', name:'낱말 수집가', desc:'낱말 10개 외우기'},
+  {id:'fo5',       icon:'⚖️', name:'사실 탐정',   desc:'사실·의견 5번'},
+  {id:'quiz3',     icon:'🎯', name:'퀴즈 달인',   desc:'퀴즈 만점 3번'},
+  {id:'think3',    icon:'✏️', name:'생각 작가',   desc:'생각 쓰기 3번'},
+  {id:'streak3',   icon:'🔥', name:'3일 연속',    desc:'3일 연속 읽기'},
+  {id:'streak7',   icon:'🌟', name:'일주일 연속', desc:'7일 연속 읽기'},
+  {id:'mission1',  icon:'✅', name:'미션 성공',   desc:'오늘의 미션 완료'},
+  {id:'practice8', icon:'🏆', name:'연습 고수',   desc:'연습에서 8점 이상'},
+];
+function achStats(){
+  const p = state.profile;
+  const readIds = (p.readArticles || []).filter(function(x){ return String(x).indexOf(':') === -1; });
+  const cats = {};
+  readIds.forEach(function(id){ const a = findArticle(id); if(a) cats[a.category] = true; });
+  const best = p.practiceBest || {};
+  const qr = p.quizResults || {};
+  return {
+    read: readIds.length,
+    cats: Object.keys(cats).length,
+    words: Object.keys(p.wordStatus || {}).filter(function(w){ return p.wordStatus[w] === 'known'; }).length,
+    fo: Object.keys(p.foResults || {}).length,
+    quizPerfect: Object.keys(qr).filter(function(k){ return qr[k] && qr[k].total && qr[k].correct === qr[k].total; }).length,
+    think: Object.keys(p.thoughts || {}).length,
+    streak: Math.max(p.bestStreak || 0, (p.streak && p.streak.count) || 0),
+    missions: p.missionDays || 0,
+    practice: Object.keys(best).reduce(function(m, k){ return Math.max(m, best[k] || 0); }, 0)
+  };
+}
+const ACH_RULES = {
+  read1:function(s){ return s.read >= 1; },       read10:function(s){ return s.read >= 10; },
+  read30:function(s){ return s.read >= 30; },     cats6:function(s){ return s.cats >= 6; },
+  words10:function(s){ return s.words >= 10; },
+  fo5:function(s){ return s.fo >= 5; },           quiz3:function(s){ return s.quizPerfect >= 3; },
+  think3:function(s){ return s.think >= 3; },     streak3:function(s){ return s.streak >= 3; },
+  streak7:function(s){ return s.streak >= 7; },   mission1:function(s){ return s.missions >= 1; },
+  practice8:function(s){ return s.practice >= 8; }
+};
+// 새로 모은 배지가 있으면 축하 창을 띄워요. (한 번 받은 배지는 다시 띄우지 않아요)
+let achTimer = null;
+function scheduleAchCheck(){
+  if(!achTimer) achTimer = setTimeout(function(){ achTimer = null; checkAchievements(); }, 700);
+}
+function checkAchievements(){
+  const p = state.profile;
+  if(!Array.isArray(p.achievements)) p.achievements = [];
+  const s = achStats();
+  const fresh = ACHIEVEMENTS.filter(function(a){ return p.achievements.indexOf(a.id) === -1 && ACH_RULES[a.id](s); });
+  if(!fresh.length) return;
+  fresh.forEach(function(a){ p.achievements.push(a.id); });
+  saveProfile();
+  if(fresh.length === 1) queueBadge({icon:fresh[0].icon, name:fresh[0].name+' 배지', sub:'새 배지를 모았어요! ('+fresh[0].desc+')'});
+  else queueBadge({icon:fresh[0].icon, name:'배지 '+fresh.length+'개를 모았어요', sub:fresh.map(function(a){ return a.name; }).join(' · ')});
+}
+function renderBadges(){
+  const got = state.profile.achievements || [];
+  return '<div class="badges">' + ACHIEVEMENTS.map(function(a){
+    const on = got.indexOf(a.id) !== -1;
+    return '<div class="bdg'+(on ? ' is-on' : '')+'"><span class="bdg__i" aria-hidden="true">'+a.icon+'</span>' +
+      '<b>'+a.name+'</b><small>'+a.desc+'</small><span class="bdg__s">'+(on ? '모았어요' : '아직')+'</span></div>';
+  }).join('') + '</div>';
+}
+
+/* ---------- 다음에 읽을 기사 ---------- */
+function renderRelated(a){
+  const byUnread = function(x, y){ return (isRead(x.id) ? 1 : 0) - (isRead(y.id) ? 1 : 0); };
+  const same = ARTICLES.filter(function(x){ return x.id !== a.id && x.category === a.category; }).sort(byUnread);
+  const others = ARTICLES.filter(function(x){ return x.id !== a.id && x.category !== a.category && !isRead(x.id); });
+  const list = same.concat(others).slice(0, 3);
+  if(!list.length) return '';
+  return '<section class="helper" aria-label="다음에 읽을 기사">' +
+    '<div class="sec__h"><h2>다음에 읽을 기사</h2><span class="sec__r">'+(same.length ? catInfo(a.category).label+' 기사부터 골랐어요' : '아직 안 읽은 기사예요')+'</span></div>' +
+    '<div class="rel">' + list.map(function(x){
+      return '<button type="button" class="rel__i" data-action="go-article" data-id="'+x.id+'"'+catStyle(x.category)+'>' +
+        '<span class="kick">'+catInfo(x.category).label+'</span>' +
+        '<span class="rel__t"><b>'+escapeHtml(x.title)+'</b><small>'+escapeHtml(x.source)+' · '+articleDate(x, true, true)+(isRead(x.id) ? ' · 읽음' : '')+'</small></span>' +
+        ic('right') + '</button>';
+    }).join('') + '</div>' +
+  '</section>';
+}
+
+/* ---------- 기사 링크 복사 ---------- */
+function articleLink(a){ return location.origin + location.pathname + '#/news/' + encodeURIComponent(a.id); }
+function fallbackCopy(text){
+  try{
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.top = '0'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    const ok = document.execCommand('copy');
+    ta.remove();
+    return ok;
+  }catch(e){ return false; }
+}
+function copyText(text){
+  if(navigator.clipboard && window.isSecureContext){
+    return navigator.clipboard.writeText(text).then(function(){ return true; }, function(){ return fallbackCopy(text); });
+  }
+  return Promise.resolve(fallbackCopy(text));
+}
+
+/* ---------- 학습지 인쇄 (선생님용: 본문 · 낱말 · 사실/의견 · 퀴즈 · 생각 쓰기 · 정답) ---------- */
+function worksheetHtml(a){
+  const ci = catInfo(a.category);
+  const nums = ['①','②','③','④'];
+  const paras = a.body.split(/\n\n+/).map(function(p){ return '<p>'+sentencesHtml(p)+'</p>'; }).join('');
+  const fo = a.fo || [], quiz = a.quiz || [];
+  return '<article class="ws">' +
+    '<header class="ws__h"><b>AI 어린이 뉴스 연구소 · 뉴스 학습지</b><span>____학년 ____반 ____번 이름: ______________</span></header>' +
+    '<p class="ws__k">'+ci.label+' · '+levelText(a.level, true)+'</p>' +
+    '<h1>'+escapeHtml(a.title)+'</h1>' +
+    '<p class="ws__src">출처: '+escapeHtml(a.source)+' · '+articleDate(a, true)+' 보도 · 원문 제목: '+escapeHtml(a.origTitle || a.title)+'</p>' +
+    '<section class="ws__body">'+paras+'</section>' +
+    ((a.words || []).length ? '<section><h2>1. 핵심 낱말</h2><table><tbody>' + a.words.map(function(w){
+      return '<tr><th>'+escapeHtml(w.word)+'</th><td>'+escapeHtml(w.meaning)+'</td></tr>';
+    }).join('') + '</tbody></table></section>' : '') +
+    (fo.length ? '<section><h2>2. 사실일까, 의견일까? 알맞은 칸에 ○ 하세요.</h2><table class="ws__fo"><thead><tr><th>문장</th><th>사실</th><th>의견</th></tr></thead><tbody>' +
+      fo.map(function(f, i){ return '<tr><td>'+(i + 1)+'. '+escapeHtml(f.text)+'</td><td></td><td></td></tr>'; }).join('') +
+    '</tbody></table></section>' : '') +
+    (quiz.length ? '<section><h2>3. 내용 퀴즈</h2>' + quiz.map(function(q, i){
+      return '<div class="ws__q"><p>'+(i + 1)+'. '+escapeHtml(q.question)+'</p><p class="ws__opts">' +
+        q.options.map(function(o, j){ return '<span>'+nums[j]+' '+escapeHtml(o)+'</span>'; }).join('') + '</p></div>';
+    }).join('') + '</section>' : '') +
+    (a.think ? '<section><h2>4. 생각 쓰기</h2><p>'+escapeHtml(a.think)+'</p><p class="ws__hint">나는 ~라고 생각해요. 왜냐하면 ~ 때문이에요.</p>' +
+      '<div class="ws__lines"><span></span><span></span><span></span><span></span></div></section>' : '') +
+    '<section class="ws__key"><h2>정답 (선생님용)</h2>' +
+      (fo.length ? '<p><b>사실·의견</b> ' + fo.map(function(f, i){ return (i + 1)+'. '+(f.type === 'fact' ? '사실' : '의견'); }).join(' · ') + '</p>' : '') +
+      (quiz.length ? '<p><b>내용 퀴즈</b> ' + quiz.map(function(q, i){ return (i + 1)+'. '+nums[q.answer]+' '+escapeHtml(q.options[q.answer]); }).join(' · ') + '</p>' : '') +
+      '<p><b>원문 주소</b> '+escapeHtml(safeUrl(a.url))+'</p>' +
+    '</section>' +
+  '</article>';
+}
+function printWorksheet(a){
+  const root = document.getElementById('print-root');
+  if(!root || !a) return;
+  root.innerHTML = worksheetHtml(a);
+  document.body.classList.add('is-printing');
+  const done = function(){
+    document.body.classList.remove('is-printing');
+    root.innerHTML = '';
+    window.removeEventListener('afterprint', done);
+  };
+  window.addEventListener('afterprint', done);
+  setTimeout(function(){ window.print(); }, 60);
 }
 
 /* =========================================================
@@ -1983,24 +2488,76 @@ function renderApp(){
     modalRoot.innerHTML = '';
   }
   fitHeader();
+  // 브라우저 탭 제목도 지금 화면에 맞게 바꿔요.
+  const base = 'AI 어린이 뉴스 연구소';
+  const art = state.view === 'article' ? findArticle(state.articleId) : null;
+  document.title = art ? art.title + ' · ' + base :
+    state.view === 'study' ? '공부방 · ' + base :
+    state.view === 'mypage' ? '내 탐정 수첩 · ' + base :
+    state.category !== 'all' ? catInfo(state.category).label + ' 뉴스 · ' + base : base;
+  scheduleAchCheck();
 }
 
 /* =========================================================
    ACTIONS
 ========================================================= */
-function goHome(){ stopSpeak(); state.wordPop=null; state.view='home'; state.mode=null; window.scrollTo(0,0); renderApp(); }
-function goArticle(id){ stopSpeak(); state.wordPop=null; state.view='article'; state.articleId=id; state.mode=null; window.scrollTo(0,0); renderApp(); }
-function goMyPage(){ stopSpeak(); state.wordPop=null; state.view='mypage'; window.scrollTo(0,0); renderApp(); }
-function goStudy(mode){
-  stopSpeak(); state.wordPop=null; state.view='study';
-  startPractice(mode || null);
-  window.scrollTo(0,0); renderApp();
+/* ---------- 주소(#)로 화면 옮기기 — 뒤로 가기·새로고침·링크 공유가 돼요 ----------
+   #/  처음 화면 · #/cat/science  분야 · #/news/기사id  기사 · #/study(/cards|wordquiz|fo|title)  공부방 · #/me  내 탐정 수첩 */
+const STUDY_MODES = ['cards', 'wordquiz', 'fo', 'title'];
+const scrollMem = {};
+let pendingNav = false, pendingRestart = false;
+function curHash(){ const h = location.hash; return (!h || h === '#') ? '#/' : h; }
+function navigate(hash, restart){
+  scrollMem[curHash()] = window.scrollY;
+  pendingRestart = !!restart;
+  if(curHash() === hash){ applyRoute(true); return; }
+  pendingNav = true;
+  location.hash = hash;               // → hashchange → applyRoute
 }
+function applyRoute(fromNav){
+  const parts = curHash().replace(/^#\/?/, '').split('/').map(function(x){ try{ return decodeURIComponent(x); }catch(e){ return x; } });
+  stopSpeak();
+  state.wordPop = null;
+  if(parts[0] === 'news' && parts[1]){
+    if(fromNav || state.articleId !== parts[1]) state.mode = null;
+    state.view = 'article';
+    state.articleId = parts[1];
+  } else if(parts[0] === 'study'){
+    const mode = STUDY_MODES.indexOf(parts[1]) !== -1 ? parts[1] : null;
+    // 뒤로 가기로 돌아오면 하던 연습을 이어서, 새로 누르면 처음부터 해요.
+    if(pendingRestart || !state.study || state.study.mode !== mode) startPractice(mode);
+    state.view = 'study';
+  } else if(parts[0] === 'me'){
+    state.view = 'mypage';
+  } else {
+    const cat = (parts[0] === 'cat' && CATEGORIES.some(function(c){ return c.id === parts[1]; })) ? parts[1] : 'all';
+    if(state.category !== cat) state.listLimit = PAGE_SIZE;
+    state.category = cat;
+    state.view = 'home';
+    state.mode = null;
+  }
+  pendingRestart = false;
+  renderApp();
+  window.scrollTo(0, fromNav ? 0 : (scrollMem[curHash()] || 0));
+}
+window.addEventListener('hashchange', function(){ const n = pendingNav; pendingNav = false; applyRoute(n); });
+// 제목(로고)을 누르면 검색어·필터를 지우고 언제나 처음 화면 맨 위로 가요.
+function goHome(){
+  state.search = '';
+  const si = document.getElementById('search-input'); if(si) si.value = '';
+  state.unreadOnly = false;
+  state.listLimit = PAGE_SIZE;
+  navigate('#/');
+}
+function goArticle(id){ navigate('#/news/' + encodeURIComponent(id)); }
+function goMyPage(){ navigate('#/me'); }
+function goStudy(mode){ navigate('#/study' + (mode ? '/' + mode : ''), true); }
 function setWordStatus(word, mark){
   if(!state.profile.wordStatus) state.profile.wordStatus = {};
   const before = state.profile.wordStatus[word];
   state.profile.wordStatus[word] = mark;
   saveProfile();
+  if(mark === 'known' && before !== 'known') bumpDaily('words', word);
   if(!state.profile.wordPointed) state.profile.wordPointed = {};
   if(mark === 'known' && before !== 'known' && !state.profile.wordPointed[word]){
     state.profile.wordPointed[word] = true;
@@ -2034,16 +2591,48 @@ document.addEventListener('click', function(e){
   else if(action === 'go-mypage') goMyPage();
   else if(action === 'go-article') goArticle(el.getAttribute('data-id'));
   else if(action === 'set-category'){
-    state.category = el.getAttribute('data-cat');
+    const cat = el.getAttribute('data-cat');
     state.listLimit = PAGE_SIZE;
     state.search = ''; document.getElementById('search-input').value = '';
-    if(state.view !== 'home'){ stopSpeak(); state.view = 'home'; state.mode = null; }
-    state.wordPop = null;
-    window.scrollTo(0,0);
-    renderApp();
+    navigate(cat && cat !== 'all' ? '#/cat/' + cat : '#/');
   }
   else if(action === 'show-more'){ state.listLimit += PAGE_SIZE; renderApp(); }
-  else if(action === 'clear-search'){ state.search=''; state.category='all'; state.listLimit=PAGE_SIZE; document.getElementById('search-input').value=''; renderApp(); }
+  else if(action === 'clear-search'){ state.search=''; state.listLimit=PAGE_SIZE; document.getElementById('search-input').value=''; navigate('#/'); }
+  else if(action === 'set-grade'){
+    const g = el.getAttribute('data-grade') || '';
+    state.profile.grade = g;
+    if(g) state.level = g;
+    state.listLimit = PAGE_SIZE;
+    saveProfile();
+    renderApp();
+  }
+  else if(action === 'toggle-unread'){ state.unreadOnly = !state.unreadOnly; state.listLimit = PAGE_SIZE; renderApp(); }
+  else if(action === 'clear-filters'){ state.profile.grade = ''; state.unreadOnly = false; saveProfile(); renderApp(); }
+  else if(action === 'mission-claim'){
+    const d = dailyState();
+    if(!d.claimed && missionsDone() === MISSIONS.length){
+      d.claimed = true;
+      state.profile.missionDays = (state.profile.missionDays || 0) + 1;
+      saveProfile();
+      addPoints(10, '오늘의 미션 완료');
+      renderApp();
+    }
+  }
+  else if(action === 'sod-pick'){
+    const it = sentenceOfDay(), d = dailyState();
+    if(it && d.foKey !== it.text){
+      d.foKey = it.text;
+      d.foPick = el.getAttribute('data-v');
+      saveProfile();
+      if(d.foPick === it.type) addPoints(2, '오늘의 문장 정답');
+      renderApp();
+    }
+  }
+  else if(action === 'copy-link'){
+    const a = findArticle(el.getAttribute('data-id'));
+    if(a) copyText(articleLink(a)).then(function(ok){ toast(ok ? '기사 주소를 복사했어요. 친구나 선생님께 보내 보세요' : '주소 칸의 주소를 길게 눌러 복사해 주세요', 2800); });
+  }
+  else if(action === 'print-ws'){ printWorksheet(findArticle(el.getAttribute('data-id'))); }
   else if(action === 'toggle-bookmark'){
     const id = el.getAttribute('data-id');
     const idx = state.profile.bookmarks.indexOf(id);
@@ -2118,6 +2707,7 @@ document.addEventListener('click', function(e){
         addPoints(score*7, '탐정 퀴즈 정답 '+score+'개');
       }
       saveProfile();
+      bumpDaily('practice');
       renderApp();
     }
   }
@@ -2150,9 +2740,10 @@ document.addEventListener('click', function(e){
         points:0, bookmarks:[], readArticles:[], quizResults:{},
         streak:{count:0, lastDate:null}, masteredCategories:[], vocabNotebook:[],
         wrongAnswers:[], readDates:[],
-        wordStatus:{}, foResults:{}, thoughts:{}, actDone:{}, practiceBest:{}, practiceDay:{}
+        wordStatus:{}, foResults:{}, thoughts:{}, actDone:{}, practiceBest:{}, practiceDay:{},
+        achievements:[], missionDays:0, bestStreak:0, grade:''
       };
-      state.foState = {}; state.thinkDraft = {}; state.study = {mode:null};
+      state.foState = {}; state.thinkDraft = {}; state.study = {mode:null}; state.unreadOnly = false;
       saveProfile();
       toast('기록을 초기화했어요');
       renderApp();
@@ -2204,6 +2795,7 @@ document.addEventListener('click', function(e){
         addPoints(correct * 2, '사실·의견 '+correct+'개 맞힘');
       }
       saveProfile();
+      bumpDaily('practice');
       renderApp();
     }
   }
@@ -2219,6 +2811,7 @@ document.addEventListener('click', function(e){
     state.profile.thoughts[id] = {text:text, date:todayStr(), title: a ? a.title : ''};
     delete state.thinkDraft[id];
     saveProfile();
+    bumpDaily('think');
     if(first) addPoints(5, '내 생각을 썼어요'); else toast('고친 생각을 저장했어요');
     renderApp();
   }
@@ -2230,6 +2823,9 @@ document.addEventListener('click', function(e){
       s.picked = +el.getAttribute('data-i');
       if(s.picked === it.answer) s.score++;
       else setWordStatus(it.word, 'again');
+    } else if(s.mode === 'title'){
+      s.picked = +el.getAttribute('data-i');
+      if(s.picked === it.answer) s.score++;
     } else {
       s.picked = el.getAttribute('data-v');
       if(s.picked === it.type) s.score++;
@@ -2246,11 +2842,13 @@ document.addEventListener('click', function(e){
     if(!p.practiceDay) p.practiceDay = {};
     if(p.practiceBest[s.mode] == null || s.score > p.practiceBest[s.mode]) p.practiceBest[s.mode] = s.score;
     saveProfile();
+    bumpDaily('practice');
     if(s.score >= 7 && p.practiceDay[s.mode] !== todayStr()){
       p.practiceDay[s.mode] = todayStr();
       saveProfile();
-      addPoints(5, (s.mode === 'fo' ? '사실·의견 연습' : '낱말 퀴즈')+' 통과');
+      addPoints(5, (PRACTICE_NAMES[s.mode] || '연습')+' 통과');
     }
+    window.scrollTo(0, 0);
     renderApp();
   }
 });
@@ -2278,8 +2876,12 @@ document.getElementById('search-input').addEventListener('input', function(e){
   const val = e.target.value;
   searchTimer = setTimeout(function(){
     state.search = val;
-    if(val.trim()) state.category = 'all';   // 검색은 모든 분야에서 찾아요
-    if(state.view !== 'home') state.view = 'home';
+    if(!val.trim()){ renderApp(); return; }
+    // 검색은 모든 분야에서 찾아요.
+    state.category = 'all';
+    state.listLimit = PAGE_SIZE;
+    if(state.view !== 'home'){ navigate('#/'); return; }
+    if(curHash() !== '#/') history.replaceState(null, '', '#/');
     renderApp();
   }, 250);
 });
@@ -2289,7 +2891,8 @@ document.getElementById('search-input').addEventListener('input', function(e){
 ========================================================= */
 async function init(){
   await loadProfile();
-  renderApp();
+  try{ if('scrollRestoration' in history) history.scrollRestoration = 'manual'; }catch(e){}
+  applyRoute(true);
   window.addEventListener('resize', fitHeader);
 }
 init();
