@@ -17,8 +17,10 @@ const warn = (id, msg) => warnings.push(`[${id}] ${msg}`);
 // 분야: 과학·우주, IT·AI, 환경·날씨, 동물·자연, 사회, 교육, 경제, 세계, 어린이, 역사, 문화·예술, 스포츠
 const CATEGORIES = ['science', 'tech', 'env', 'nature', 'society', 'school', 'economy', 'world', 'kids', 'history', 'culture', 'sports'];
 const LEVELS = ['1-6', '3-6', '5-6'];
-const MAX_ARTICLES = 60;
+const MAX_ARTICLES = 150;      // 전체 기사 수
+const MAX_PER_CATEGORY = 12;   // 분야마다 기사 수
 const FIRST_BATCH = '2026-11-17'; // 처음 한꺼번에 실은 기사들은 '3일 안' 규칙에서 빼요
+const ARCHIVE_DAYS = 60;       // 분야 둘러보기용 지난 기사(archive: true)는 보도 60일 안
 // 어린이 기사에 절대 나오면 안 되는 낱말 (나오면 오류)
 const BANNED = ['살인', '살해', '시신', '사망자', '숨진', '숨졌', '자살', '극단적 선택', '자해', '성폭행', '성추행', '성범죄', '성착취', '음란',
   '마약', '도박', '음주운전', '흉기', '총격', '총기', '폭탄', '테러', '참수', '고문', '학살', '유괴', '납치', '스토킹'];
@@ -77,7 +79,9 @@ for (const a of data.articles) {
   if (!isDate(a.date)) err(id, `보도 날짜(date) 형식이 틀렸어요: ${a.date}`);
   else if (days(a.date, today) > 0) err(id, `보도 날짜가 오늘(${today})보다 뒤예요.`);
   if (!isDate(a.added)) err(id, `실은 날짜(added) 형식이 틀렸어요: ${a.added}`);
-  else if (isDate(a.date) && a.added > FIRST_BATCH && days(a.added, a.date) > 3) err(id, '새로 싣는 기사는 보도된 지 3일 안의 기사여야 해요.');
+  else if (a.archive !== undefined && a.archive !== true) err(id, 'archive 칸은 true일 때만 넣어요.');
+  else if (isDate(a.date) && a.archive === true && days(a.added, a.date) > ARCHIVE_DAYS) err(id, `지난 기사(archive)는 보도된 지 ${ARCHIVE_DAYS}일 안의 기사여야 해요.`);
+  else if (isDate(a.date) && a.archive !== true && a.added > FIRST_BATCH && days(a.added, a.date) > 3) err(id, '새로 싣는 기사는 보도된 지 3일 안의 기사여야 해요.');
 
   // 글 길이와 문장
   if ((a.title || '').length > 34) err(id, `제목이 너무 길어요 (${a.title.length}자, 34자 이하).`);
@@ -126,10 +130,11 @@ for (const a of data.articles) {
   if (!a.review || a.review.ok !== true || !isDate(a.review.date) || !String(a.review.note || '').trim()) err(id, 'review {date, ok:true, by, note} 검토 기록이 필요해요.');
 }
 
-const newest = data.articles.reduce((m, a) => (a.added > m ? a.added : m), '');
+const newest = data.articles.filter(a => a.archive !== true).reduce((m, a) => (a.added > m ? a.added : m), '');
 if (newest && data.updated !== newest) warn('전체', `updated(${data.updated})가 가장 최근에 실은 날짜(${newest})와 달라요.`);
 const cats = {};
 data.articles.forEach(a => { cats[a.category] = (cats[a.category] || 0) + 1; });
+for (const [c, n] of Object.entries(cats)) if (n > MAX_PER_CATEGORY) err('전체', `${c} 분야 기사가 ${n}개예요. 그 분야에서 보도 날짜가 가장 오래된 기사부터 지워 ${MAX_PER_CATEGORY}개 이하로 맞춰 주세요.`);
 
 console.log(`기사 ${data.articles.length}개 · 분야별 ${JSON.stringify(cats)} · 최근 업데이트 ${data.updated} · 오늘 ${today}`);
 if (warnings.length) console.log('\n경고 ' + warnings.length + '개\n- ' + warnings.join('\n- '));

@@ -8,6 +8,10 @@
 <title>AI 어린이 뉴스 연구소</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%232F5BEA'/%3E%3Ccircle cx='14.5' cy='14.5' r='6.5' fill='none' stroke='%23fff' stroke-width='2.6'/%3E%3Cpath d='M19.5 19.5l5 5' stroke='%23fff' stroke-width='2.8' stroke-linecap='round'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
+<!-- 신문 제호 글꼴: 제목 글자만 받아 와요 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@900&text=%20AI%EA%B5%AC%EB%89%B4%EB%A6%B0%EC%86%8C%EC%8A%A4%EC%96%B4%EC%97%B0%EC%9D%B4&display=swap">
 <script>
   /* 화면이 뜨기 전에 고른 밝기를 먼저 적용해 깜박임을 막아요 (처음 오면 어두운 화면) */
   try{var s=JSON.parse(localStorage.getItem('kidsNewsLab:settings')||'{}');document.documentElement.dataset.theme=s.theme==='light'?'light':'dark'}catch(e){document.documentElement.dataset.theme='dark'}
@@ -43,12 +47,13 @@
   --fact:#5FD3A6;--fact-soft:#0F2A20;--opinion:#FF9F6B;--opinion-soft:#2E1B10;
   --ok:#62D8A8;--ok-soft:#12352C;--err:#FF8C95;--err-soft:#3A1A20;--think:#262111;
   --shadow:rgba(0,0,0,.6);
-  --edge:inset 0 1px 0 rgba(255,255,255,.07);
-  --sh-1:0 1px 2px rgba(0,0,0,.55),0 4px 12px -4px rgba(0,0,0,.65);
-  --sh-2:0 2px 4px rgba(0,0,0,.5),0 18px 36px -14px rgba(0,0,0,.9);
-  --sh-3:0 4px 10px rgba(0,0,0,.5),0 28px 56px -20px rgba(0,0,0,.95);
-  --sh-card:0 0 0 1px rgba(255,255,255,.02),0 1px 2px rgba(0,0,0,.6),0 8px 18px -6px rgba(0,0,0,.8),0 22px 40px -22px rgba(0,0,0,.95);
-  --sh-card-h:0 0 0 1px rgba(255,255,255,.04),0 2px 6px rgba(0,0,0,.6),0 20px 36px -12px rgba(0,0,0,.9),0 40px 64px -30px rgba(0,0,0,1);
+  --edge:inset 0 1px 0 rgba(255,255,255,.08);
+  /* 어두운 화면: 검은 그림자는 바탕에 묻혀 안 보여서, 테두리 빛 + 은은하게 번지는 푸른 빛으로 음영을 만들어요 */
+  --sh-1:0 0 0 1px rgba(255,255,255,.035),0 2px 6px rgba(0,0,0,.5),0 6px 18px -10px rgba(124,155,255,.24);
+  --sh-2:0 0 0 1px rgba(255,255,255,.06),0 2px 6px rgba(0,0,0,.5),0 18px 40px -16px rgba(124,155,255,.42);
+  --sh-3:0 0 0 1px rgba(255,255,255,.07),0 4px 10px rgba(0,0,0,.5),0 28px 60px -20px rgba(124,155,255,.45);
+  --sh-card:0 0 0 1px rgba(255,255,255,.05),0 2px 5px rgba(0,0,0,.55),0 14px 34px -14px rgba(124,155,255,.34);
+  --sh-card-h:0 0 0 1px rgba(255,255,255,.09),0 2px 5px rgba(0,0,0,.55),0 24px 50px -16px rgba(124,155,255,.55);
   --glow:.5;
   --c-science:#82A8FF;--c-tech:#A5A3FF;--c-env:#4FD1C5;--c-nature:#A3D65C;--c-society:#FF9F5A;--c-school:#6CC3F2;
   --c-economy:#E8C24D;--c-world:#5CC8DC;--c-kids:#FF8FC0;--c-history:#D9A877;--c-culture:#C4A6FF;--c-sports:#FF7B7B;
@@ -636,6 +641,51 @@ body{background:
 }
 .bdg{transition:transform .2s,box-shadow .2s}
 
+/* 어두운 화면의 분야 카드: 분야 색으로 빛나는 그림자 */
+[data-theme=dark] .nc,[data-theme=dark] .catc,[data-theme=dark] .rel__i{box-shadow:var(--edge),0 0 0 1px rgba(255,255,255,.05),0 2px 5px rgba(0,0,0,.55),0 16px 36px -14px color-mix(in srgb,var(--cc) 46%,transparent)}
+[data-theme=dark] .nc,[data-theme=dark] .mtab,[data-theme=dark] .tile,[data-theme=dark] .box,[data-theme=dark] .catc,[data-theme=dark] .rel__i,[data-theme=dark] .bdg,[data-theme=dark] .stat{border-color:#2C2C33}
+[data-theme=dark] .feat{box-shadow:var(--edge),0 0 0 1px rgba(255,255,255,.06),0 26px 60px -22px color-mix(in srgb,var(--cc) 50%,transparent)}
+@media(hover:hover){
+  [data-theme=dark] .nc:hover,[data-theme=dark] .catc:hover,[data-theme=dark] .rel__i:hover{box-shadow:var(--edge),0 0 0 1px color-mix(in srgb,var(--cc) 40%,transparent),0 2px 5px rgba(0,0,0,.55),0 22px 48px -14px color-mix(in srgb,var(--cc) 70%,transparent)}
+  [data-theme=dark] .feat:hover{box-shadow:var(--edge),0 0 0 1px color-mix(in srgb,var(--cc) 35%,transparent),0 30px 70px -22px color-mix(in srgb,var(--cc) 70%,transparent)}
+}
+
+/* ---------- 신문 느낌: 망점 바탕 · 제호 · 헤드라인 띠 ---------- */
+body{position:relative}
+body::before{content:'';position:absolute;inset:0 0 auto 0;height:1100px;z-index:-1;pointer-events:none;
+  background-image:radial-gradient(color-mix(in srgb,var(--ink) 16%,transparent) .9px,transparent 1.4px);background-size:11px 11px;
+  -webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,.9),rgba(0,0,0,.35) 45%,transparent);mask-image:linear-gradient(180deg,rgba(0,0,0,.9),rgba(0,0,0,.35) 45%,transparent)}
+[data-theme=dark] body::before{background-image:radial-gradient(color-mix(in srgb,var(--ink) 11%,transparent) .9px,transparent 1.4px)}
+.mast{position:relative;text-align:center}
+.mast>*{position:relative}
+.mast__top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 2px;border-top:2px solid var(--ink);border-bottom:1px solid var(--ink);font-size:12.5px;font-weight:700;color:var(--ink-2);letter-spacing:.01em}
+.mast__top b{font-weight:800;color:var(--ink)}
+.intro h1.mast__t{margin:18px 0 12px;background:none;color:var(--ink);-webkit-text-fill-color:currentColor;font-family:'Noto Serif KR','Nanum Myeongjo','AppleMyungjo','Batang','바탕',serif;font-size:54px;font-weight:900;letter-spacing:-.02em;line-height:1.15}
+.mast__rule{display:block;height:6px;border-top:1px solid var(--ink);border-bottom:2px solid var(--ink)}
+.mast .intro__line{margin-top:14px}
+.mast .upd{justify-content:center}
+.mast__art{position:absolute;top:66px;width:200px;height:250px;color:var(--ink);opacity:.07;pointer-events:none}
+.mast__art--l{left:-8px;transform:rotate(-9deg)}
+.mast__art--r{right:-8px;transform:rotate(8deg)}
+[data-theme=dark] .mast__art{opacity:.09}
+.ticker{display:flex;align-items:center;height:48px;margin-top:22px;border:1px solid var(--line);border-radius:999px;background:linear-gradient(180deg,var(--surface-2),var(--surface));box-shadow:var(--edge),var(--sh-card);overflow:hidden}
+.ticker__k{flex:none;display:inline-flex;align-items:center;gap:7px;height:100%;padding:0 18px;background:var(--ink);color:var(--page);font-size:13.5px;font-weight:800;letter-spacing:.01em}
+.ticker__k i{width:7px;height:7px;border-radius:50%;background:#FF4D4F;box-shadow:0 0 0 3px rgba(255,77,79,.25);animation:blink 1.6s ease-in-out infinite}
+.ticker__v{flex:1;min-width:0;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 28px,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(90deg,transparent,#000 28px,#000 calc(100% - 28px),transparent)}
+.ticker__t{display:flex;width:max-content;animation:tick 80s linear infinite}
+.ticker:hover .ticker__t,.ticker:focus-within .ticker__t{animation-play-state:paused}
+.ticker__t button{flex:none;display:inline-flex;align-items:center;gap:8px;height:46px;padding:0 20px 0 22px;border:0;background:none;font-size:14.5px;font-weight:700;color:var(--ink);white-space:nowrap}
+.ticker__t button:hover{text-decoration:underline;text-underline-offset:4px}
+.ticker__t button b{font-size:12.5px;font-weight:800;color:var(--cc)}
+.ticker__t button::after{content:'';width:4px;height:4px;margin-left:12px;border-radius:50%;background:var(--ink-3)}
+@keyframes tick{to{transform:translateX(-50%)}}
+@keyframes blink{50%{opacity:.35}}
+@media(prefers-reduced-motion:reduce){
+  .ticker__v{overflow-x:auto;scrollbar-width:none}
+  .ticker__t{animation:none!important}
+  .ticker__k i{animation:none!important}
+}
+
 @media(max-width:1080px){
   .gnb .wrap{padding-right:32px;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 36px),transparent)}
 }
@@ -724,6 +774,13 @@ body{background:
   .rel__i>.ic{display:none}
   .rel__t b{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
   .pq__p{font-size:16px;padding:14px 15px}
+  .intro h1.mast__t{margin:14px 0 10px;font-size:31px}
+  .mast__top{font-size:11.5px;gap:8px}
+  .mast__top span:last-child{display:none}
+  .mast__art{display:none}
+  .ticker{height:44px;margin-top:18px}
+  .ticker__k{padding:0 13px;font-size:13px}
+  .ticker__t button{height:42px;font-size:14px;padding:0 16px 0 18px}
 }
 
 /* ---------- 인쇄: 학습지 단추를 누르면 학습지만, 그냥 인쇄하면 기사 본문만 ---------- */
@@ -860,10 +917,12 @@ const NEWS = (window.NEWS_DATA && Array.isArray(window.NEWS_DATA.articles)) ? wi
 const ARTICLES = NEWS.articles.filter(function(a){ return a && a.id && a.title && a.body; });
 ARTICLES.sort(function(a, b){ return a.date < b.date ? 1 : a.date > b.date ? -1 : 0; });
 // 가장 최근에 실은 기사 묶음에는 '새 기사' 표시를 붙여요 (처음 한꺼번에 실은 묶음은 빼요).
-const LATEST_ADDED = ARTICLES.reduce(function(m, a){ return (a.added || '') > m ? a.added : m; }, '');
+// '분야 둘러보기'용으로 모은 지난 기사(archive)는 새 기사 표시에서 빼요.
+const DAILY = ARTICLES.filter(function(a){ return a.archive !== true; });
+const LATEST_ADDED = DAILY.reduce(function(m, a){ return (a.added || '') > m ? a.added : m; }, '');
 const NEW_IDS = (function(){
-  const batch = ARTICLES.filter(function(a){ return a.added === LATEST_ADDED; });
-  return batch.length < ARTICLES.length ? batch.map(function(a){ return a.id; }) : [];
+  const batch = DAILY.filter(function(a){ return a.added === LATEST_ADDED; });
+  return batch.length < DAILY.length ? batch.map(function(a){ return a.id; }) : [];
 })();
 function isNew(a){ return NEW_IDS.indexOf(a.id) !== -1; }
 function findArticle(id){ return ARTICLES.find(a=>a.id===id); }
@@ -1363,7 +1422,9 @@ function renderHome(){
   const all = filteredArticles();
   const q = state.search.trim();
   const isSearching = q !== '';
-  const list = isSearching ? all : all.slice(0, state.listLimit);
+  // 분야 화면에서는 그 분야 기사를 한 번에 12개까지 보여 줘요.
+  const limit = state.category === 'all' ? state.listLimit : Math.max(state.listLimit, 12);
+  const list = isSearching ? all : all.slice(0, limit);
   const remaining = all.length - list.length;
   const readCount = all.filter(function(a){ return isRead(a.id); }).length;
   const ci = catInfo(state.category);
@@ -1403,12 +1464,14 @@ function renderHome(){
       '</section>' +
       news + explore('다른 분야 둘러보기');
   }
-  return '<section class="wrap intro">' +
-      '<p class="intro__k">초등학생을 위한 AI 뉴스 읽기</p>' +
-      '<h1>AI 어린이 뉴스 연구소</h1>' +
+  return '<section class="wrap intro mast">' + paperArt('l') + paperArt('r') +
+      '<p class="mast__top"><span>제 <b>'+issueNo()+'</b>호</span><span>'+longDate(todayStr())+'</span><span>초등학생을 위한 AI 뉴스 읽기</span></p>' +
+      '<h1 class="mast__t">AI 어린이 뉴스 연구소</h1>' +
+      '<span class="mast__rule" aria-hidden="true"></span>' +
       '<p class="intro__line"><span class="clause">기사를 눈높이에 맞게 쉽게 설명해 주고,</span> <span class="clause">사실과 의견을 스스로 구별하는 힘을 길러 줘요.</span></p>' +
       renderUpdateLine() +
     '</section>' +
+    renderTicker() +
     '<section class="wrap top">'+renderFeatured()+renderMyCard()+'</section>' +
     renderToday() +
     news +
@@ -2161,6 +2224,51 @@ function renderPractice(){
    MORE : 오늘의 공부 · 학년별 보기 · 분야 둘러보기 · 배지 · 다음 기사 · 링크 · 학습지
 ========================================================= */
 const PRACTICE_NAMES = {wordquiz:'낱말 퀴즈', fo:'사실·의견 연습', title:'제목 맞히기'};
+
+/* ---------- 신문 제호: 호수·날짜, 신문 그림, 헤드라인 띠 ---------- */
+const FIRST_ISSUE = '2026-11-17';   // 신문을 처음 펴낸 날 = 제 1호
+function issueNo(){
+  const p = FIRST_ISSUE.split('-').map(Number);
+  const d = new Date();
+  return Math.max(1, Math.round((Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) - Date.UTC(p[0], p[1]-1, p[2])) / 86400000) + 1);
+}
+function longDate(s){
+  const p = String(s).split('-').map(Number);
+  const wd = WEEKDAYS[new Date(Date.UTC(p[0], p[1]-1, p[2])).getUTCDay()];
+  return p[0]+'년 '+p[1]+'월 '+p[2]+'일 '+wd+'요일';
+}
+// 접힌 신문 한 장을 선으로 그린 그림 (제호 양옆 장식)
+function paperArt(side){
+  return '<svg class="mast__art mast__art--'+side+'" viewBox="0 0 200 250" aria-hidden="true" focusable="false">' +
+    '<rect x="6" y="6" width="188" height="238" rx="6" fill="none" stroke="currentColor" stroke-width="3"/>' +
+    '<g fill="currentColor">' +
+      '<rect x="22" y="22" width="156" height="16" rx="2"/>' +
+      '<rect x="22" y="46" width="156" height="2"/><rect x="22" y="51" width="156" height="1"/>' +
+      '<rect x="22" y="62" width="112" height="9" rx="2"/><rect x="22" y="76" width="84" height="9" rx="2"/>' +
+      '<rect x="22" y="96" width="72" height="56" rx="3" opacity=".55"/>' +
+      '<rect x="104" y="96" width="74" height="4" rx="2"/><rect x="104" y="106" width="74" height="4" rx="2"/><rect x="104" y="116" width="60" height="4" rx="2"/>' +
+      '<rect x="104" y="130" width="74" height="4" rx="2"/><rect x="104" y="140" width="66" height="4" rx="2"/>' +
+      '<rect x="22" y="164" width="156" height="1"/>' +
+      '<rect x="22" y="176" width="48" height="4" rx="2"/><rect x="22" y="186" width="48" height="4" rx="2"/><rect x="22" y="196" width="40" height="4" rx="2"/><rect x="22" y="206" width="48" height="4" rx="2"/><rect x="22" y="216" width="34" height="4" rx="2"/>' +
+      '<rect x="76" y="176" width="48" height="4" rx="2"/><rect x="76" y="186" width="48" height="4" rx="2"/><rect x="76" y="196" width="48" height="4" rx="2"/><rect x="76" y="206" width="36" height="4" rx="2"/>' +
+      '<rect x="130" y="176" width="48" height="4" rx="2"/><rect x="130" y="186" width="44" height="4" rx="2"/><rect x="130" y="196" width="48" height="4" rx="2"/><rect x="130" y="206" width="48" height="4" rx="2"/><rect x="130" y="216" width="28" height="4" rx="2"/>' +
+    '</g></svg>';
+}
+// 최근 기사 제목이 옆으로 흐르는 헤드라인 띠 (마우스를 올리면 멈춰요)
+function renderTicker(){
+  const items = ARTICLES.slice(0, 8);
+  if(items.length < 2) return '';
+  const row = function(hidden){
+    return items.map(function(a){
+      return '<button type="button" data-action="go-article" data-id="'+a.id+'"'+catStyle(a.category)+(hidden ? ' tabindex="-1" aria-hidden="true"' : '')+'>' +
+        '<b>'+catInfo(a.category).label+'</b>'+escapeHtml(a.title)+'</button>';
+    }).join('');
+  };
+  return '<div class="wrap"><div class="ticker" role="region" aria-label="오늘의 헤드라인">' +
+    '<span class="ticker__k"><i aria-hidden="true"></i>헤드라인</span>' +
+    '<div class="ticker__v"><div class="ticker__t">'+row(false)+row(true)+'</div></div>' +
+  '</div></div>';
+}
 function dayNumber(){
   const d = new Date();
   return Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86400000);
