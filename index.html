@@ -327,7 +327,8 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9em;back
 .cal__d{padding:4px 0;font-size:12px;font-weight:700;color:var(--ink-3)}
 .cal__c{aspect-ratio:1;display:grid;place-items:center;border-radius:10px;font-size:14px;font-weight:600;color:var(--ink-2);font-variant-numeric:tabular-nums}
 .cal__c.on{background:var(--main);color:var(--on-main);font-weight:800}
-.cal__c.today{box-shadow:inset 0 0 0 1.5px var(--ink)}
+.cal__c.is-today{box-shadow:inset 0 0 0 1.5px var(--ink)}
+.cal__c.on.is-today{box-shadow:inset 0 0 0 2px var(--on-main),0 0 0 1.5px var(--main)}
 .cal__lg{display:flex;align-items:center;gap:6px;margin-top:10px;font-size:13px;color:var(--ink-3)}
 .cal__lg i{width:10px;height:10px;border-radius:3px;background:var(--main)}
 .wn{display:grid;gap:12px}
@@ -1822,7 +1823,7 @@ function renderCalendar(){
   for(let d = 1; d <= daysInMonth; d++){
     const dateStr = year+'-'+String(month+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
     const on = readSet.indexOf(dateStr) !== -1;
-    cells += '<span class="cal__c'+(on ? ' on' : '')+(dateStr === todayVal ? ' today' : '')+'">'+d+'</span>';
+    cells += '<span class="cal__c'+(on ? ' on' : '')+(dateStr === todayVal ? ' is-today' : '')+'">'+d+'</span>';
   }
   return '<div class="cal">' +
     '<div class="cal__h">' +
