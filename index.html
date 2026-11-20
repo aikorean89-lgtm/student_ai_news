@@ -103,6 +103,19 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9em;back
 .hd__r{display:flex;align-items:center;gap:8px;flex:none}
 .round{width:42px;height:42px;border:0;border-radius:50%;background:var(--bg);display:grid;place-items:center;color:var(--ink);transition:background .15s}
 .round:hover{background:var(--surface-hover)}
+/* 화면 밝기 스위치 (어둡게 | 밝게) */
+.tsw{position:relative;display:inline-grid;grid-template-columns:1fr 1fr;align-items:center;height:42px;padding:4px;border:0;border-radius:999px;background:var(--bg);color:var(--ink-2);font:800 13.5px var(--sans);cursor:pointer;box-shadow:inset 0 0 0 1px var(--line),var(--edge),var(--sh-1);transition:box-shadow .2s,transform .15s}
+.tsw__k{position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);border-radius:999px;background:var(--main);box-shadow:0 6px 16px -6px color-mix(in srgb,var(--main) 90%,transparent),inset 0 1px 0 rgba(255,255,255,.28);transition:transform .28s cubic-bezier(.3,.7,.3,1),background .28s,box-shadow .28s}
+.tsw[data-mode=light] .tsw__k{transform:translateX(100%);background:#F5A623;box-shadow:0 6px 16px -6px rgba(245,166,35,.9),inset 0 1px 0 rgba(255,255,255,.35)}
+.tsw__o{position:relative;z-index:1;display:inline-flex;align-items:center;justify-content:center;gap:5px;height:34px;padding:0 13px;border-radius:999px;white-space:nowrap;transition:color .25s}
+.tsw__o .ic{width:16px;height:16px}
+.tsw[data-mode=dark] .tsw__o--d{color:var(--on-main)}
+.tsw[data-mode=light] .tsw__o--l{color:#3A2500}
+/* 학습지 인쇄: 기사 화면에서 가장 눈에 띄는 단추 */
+.btn--print{background:linear-gradient(135deg,var(--main),color-mix(in srgb,var(--main) 62%,#B06BFF));color:var(--on-main)}
+.btn--print:hover{background:linear-gradient(135deg,var(--main-d),color-mix(in srgb,var(--main-d) 62%,#B06BFF))}
+@media(max-width:1000px){.tsw__t{display:none}.tsw__o{padding:0 11px}}
+.btn__tag{display:inline-flex;align-items:center;height:19px;margin-left:2px;padding:0 6px;border-radius:6px;background:color-mix(in srgb,var(--on-main) 20%,transparent);font-size:11px;font-weight:800;letter-spacing:.3px}
 .me{display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 6px 0 14px;border:0;border-radius:999px;background:var(--bg);font-weight:700;font-size:14.5px;transition:background .15s}
 .me:hover{background:var(--surface-hover)}
 .me[aria-current=page]{background:var(--ink);color:var(--page)}
@@ -508,6 +521,7 @@ body{background:
 .btn--main{box-shadow:0 8px 20px -10px color-mix(in srgb,var(--main) 85%,transparent),inset 0 1px 0 rgba(255,255,255,.2)}
 .btn--ink{box-shadow:var(--sh-1)}
 .btn--line{background:var(--surface-2);box-shadow:inset 0 0 0 1.5px var(--line),var(--sh-1)}
+.btn--print{box-shadow:0 8px 22px -8px color-mix(in srgb,var(--main) 95%,transparent),0 0 0 1px color-mix(in srgb,var(--main) 55%,transparent),inset 0 1px 0 rgba(255,255,255,.25)}
 .seg{box-shadow:inset 0 1px 2px rgba(0,0,0,.12)}
 .seg button{transition:background .15s,color .15s,box-shadow .15s}
 .seg button[aria-pressed=true]{box-shadow:0 1px 2px rgba(0,0,0,.18),0 4px 10px -4px rgba(0,0,0,.22)}
@@ -549,6 +563,11 @@ body{background:
   .round:hover:not(:disabled),.me:hover{transform:translateY(-1px);box-shadow:var(--edge),var(--sh-2)}
   .btn--main:hover{transform:translateY(-1px);box-shadow:0 12px 24px -10px color-mix(in srgb,var(--main) 90%,transparent),inset 0 1px 0 rgba(255,255,255,.2)}
   .btn--line:hover{background:var(--surface-2);box-shadow:inset 0 0 0 1.5px var(--ink-3),var(--sh-2);transform:translateY(-1px)}
+  .btn--print:hover{transform:translateY(-1px);box-shadow:0 14px 30px -8px color-mix(in srgb,var(--main) 100%,transparent),0 0 0 1px color-mix(in srgb,var(--main) 70%,transparent),inset 0 1px 0 rgba(255,255,255,.25)}
+  .tsw:hover{transform:translateY(-1px);box-shadow:inset 0 0 0 1px var(--ink-3),var(--edge),var(--sh-2)}
+  .tsw:hover .tsw__o{color:var(--ink)}
+  .tsw[data-mode=dark]:hover .tsw__o--d{color:var(--on-main)}
+  .tsw[data-mode=light]:hover .tsw__o--l{color:#3A2500}
   .feat:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--cc) 40%,var(--line));box-shadow:var(--edge),var(--sh-3),0 22px 44px -26px color-mix(in srgb,var(--cc) 80%,transparent)}
   .nc:hover{transform:translateY(-4px);border-color:color-mix(in srgb,var(--cc) 45%,var(--line));box-shadow:var(--edge),var(--sh-2),0 18px 36px -22px color-mix(in srgb,var(--cc) 85%,transparent)}
   .nc:hover::before{opacity:1}
@@ -785,6 +804,12 @@ body::before{content:'';position:absolute;inset:0 0 auto 0;height:1100px;z-index
   .logo__m{width:30px;height:30px}
   .hd__r{margin-left:auto;gap:6px}
   .round{width:38px;height:38px}
+  /* 좁은 화면: 지금 화면을 색 동그라미로 보여 줘요 (어둡게 = 파랑 달, 밝게 = 노랑 해) */
+  .tsw{grid-template-columns:1fr;width:38px;height:38px;padding:0}
+  .tsw__k,.tsw[data-mode=light] .tsw__k{top:0;bottom:0;left:0;width:100%;transform:none}
+  .tsw[data-mode=dark] .tsw__o--l,.tsw[data-mode=light] .tsw__o--d{display:none}
+  .tsw__o{height:38px;padding:0}
+  .tsw__o .ic{width:18px;height:18px}
   .me{height:38px;padding:0 4px 0 10px;gap:6px}
   .me__lbl{display:none}
   .me__pt{height:28px}
@@ -911,7 +936,7 @@ body::before{content:'';position:absolute;inset:0 0 auto 0;height:1100px;z-index
       <button type="button" class="search__x" id="clear-search-btn" data-action="clear-search" aria-label="검색어 지우기" hidden><svg viewBox="0 0 24 24" class="ic" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     </label>
     <div class="hd__r">
-      <button type="button" class="round" id="theme-toggle-btn" data-action="toggle-theme" aria-label="어두운 화면으로 바꾸기"></button>
+      <button type="button" class="tsw" id="theme-toggle-btn" data-action="toggle-theme" aria-label="밝은 화면으로 바꾸기"></button>
       <button type="button" class="me me--study" id="study-btn" data-action="go-study" aria-label="공부방"><svg viewBox="0 0 24 24" class="ic" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5C10 5 7.5 4.5 4 5v13.5c3.5-.5 6 0 8 1.5 2-1.5 4.5-2 8-1.5V5c-3.5-.5-6 0-8 1.5zM12 6.5V20"/></svg><span class="me__lbl">공부방</span></button>
       <button type="button" class="me" id="me-btn" data-action="go-mypage" aria-label="내 탐정 수첩"><svg viewBox="0 0 24 24" class="ic" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4.5 20.5c.8-4 3.8-6 7.5-6s6.7 2 7.5 6"/></svg><span class="me__lbl">내 탐정 수첩</span><span class="me__pt" id="points-pill">0P</span></button>
     </div>
@@ -1400,8 +1425,15 @@ function renderHeaderBits(){
   const dark = state.theme === 'dark';
   const tb = document.getElementById('theme-toggle-btn');
   if(tb){
-    tb.innerHTML = ic(dark ? 'sun' : 'moon');
+    // 어둡게·밝게 두 칸짜리 스위치예요. 안쪽은 한 번만 그리고 data-mode만 바꿔서 손잡이가 미끄러지게 해요.
+    if(!tb.querySelector('.tsw__k')){
+      tb.innerHTML = '<span class="tsw__k" aria-hidden="true"></span>' +
+        '<span class="tsw__o tsw__o--d" aria-hidden="true">'+ic('moon')+'<span class="tsw__t">어둡게</span></span>' +
+        '<span class="tsw__o tsw__o--l" aria-hidden="true">'+ic('sun')+'<span class="tsw__t">밝게</span></span>';
+    }
+    tb.setAttribute('data-mode', dark ? 'dark' : 'light');
     tb.setAttribute('aria-label', dark ? '밝은 화면으로 바꾸기' : '어두운 화면으로 바꾸기');
+    tb.title = dark ? '밝은 화면으로 바꾸기' : '어두운 화면으로 바꾸기';
   }
   const pp = document.getElementById('points-pill');
   if(pp) pp.textContent = state.profile.points + 'P';
@@ -1791,7 +1823,7 @@ function renderArticleView(id){
       '<div class="art__acts">' +
         '<button type="button" class="btn btn--line btn--sm bm-btn" data-action="toggle-bookmark" data-id="'+article.id+'" aria-pressed="'+bm+'">'+ic('bookmark')+(bm ? '스크랩함' : '스크랩')+'</button>' +
         '<button type="button" class="btn btn--line btn--sm" data-action="copy-link" data-id="'+article.id+'">'+ic('link')+'링크 복사</button>' +
-        '<button type="button" class="btn btn--line btn--sm" data-action="print-ws" data-id="'+article.id+'">'+ic('print')+'학습지 인쇄</button>' +
+        '<button type="button" class="btn btn--sm btn--print" data-action="print-ws" data-id="'+article.id+'" title="이 기사로 A4 학습지를 만들어 인쇄해요 (정답은 다음 쪽)">'+ic('print')+'학습지 인쇄<span class="btn__tag">A4</span></button>' +
       '</div>' +
     '</div>' +
     '<p class="art__k">'+ci.label+'</p>' +
