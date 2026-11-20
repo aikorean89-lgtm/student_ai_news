@@ -117,6 +117,15 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9em;back
 .gnb .dot{width:7px;height:7px;border-radius:50%;background:var(--cc);margin-right:7px}
 .gnb i{font-style:normal;margin-left:5px;font-size:12px;font-weight:700;color:var(--ink-3);font-variant-numeric:tabular-nums}
 
+/* 접속자 수 탭 */
+.gnb .vis{flex:none;margin-left:auto;display:inline-flex;align-items:center;gap:8px;height:30px;padding:0 11px;border-radius:999px;background:linear-gradient(180deg,var(--surface-2),var(--surface));box-shadow:var(--edge),inset 0 0 0 1px var(--line),var(--sh-1);font-size:12.5px;font-weight:700;color:var(--ink-3);white-space:nowrap;font-variant-numeric:tabular-nums}
+.gnb .vis b{margin-left:3px;font-weight:800;color:var(--ink)}
+.vis__live{display:inline-flex;align-items:center}
+.vis__dot{width:7px;height:7px;margin-right:6px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px color-mix(in srgb,var(--ok) 22%,transparent);animation:visPulse 2s ease-in-out infinite}
+.vis__sep{width:1px;height:11px;background:var(--line-2)}
+@keyframes visPulse{50%{box-shadow:0 0 0 5px color-mix(in srgb,var(--ok) 6%,transparent)}}
+@media(prefers-reduced-motion:reduce){.vis__dot{animation:none}}
+
 /* 처음 화면 */
 .intro{padding-top:40px}
 .intro__k{font-size:13px;font-weight:800;letter-spacing:.02em;color:var(--main)}
@@ -487,7 +496,7 @@ body{background:
 .me__pt{box-shadow:0 4px 12px -4px color-mix(in srgb,var(--main) 80%,transparent)}
 /* 분야 탭: 알약 모양, 고른 탭은 분야 색으로 은은하게 빛나요 */
 .gnb .wrap{align-items:center;gap:2px}
-.gnb button{height:36px;padding:0 11px;border-radius:999px;transition:background .18s,color .18s,box-shadow .2s,transform .18s}
+.gnb button{height:36px;padding:0 9px;border-radius:999px;transition:background .18s,color .18s,box-shadow .2s,transform .18s}
 .gnb i{display:none}
 .gnb button[aria-current=true] i{display:inline}
 .gnb button[aria-current=true]{color:var(--ink);background:color-mix(in srgb,var(--cc,var(--main)) 15%,var(--surface));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--cc,var(--main)) 45%,transparent),0 6px 16px -8px color-mix(in srgb,var(--cc,var(--main)) 75%,transparent)}
@@ -1407,7 +1416,7 @@ function renderHeaderBits(){
       const cur = state.view === 'home' && state.category === c.id;
       return '<button type="button" data-action="set-category" data-cat="'+c.id+'" aria-current="'+(cur?'true':'false')+'"'+catStyle(c.id)+'>' +
         (c.id !== 'all' ? '<span class="dot"></span>' : '') + c.label + '<i>'+n+'</i></button>';
-    }).join('');
+    }).join('') + visitsChip();
   }
   // 고른 분야 탭이 가려져 있으면 탭 줄을 옆으로 밀어 보여 줘요.
   const curTab = gnb && gnb.querySelector('[aria-current="true"]');
@@ -3121,6 +3130,45 @@ document.getElementById('search-input').addEventListener('input', function(e){
 });
 
 /* =========================================================
+   접속자 수 (맨 위 분야 줄 오른쪽 끝, 내 탐정 수첩 아래)
+   /api/visits 가 좋은탴월드와 같은 Upstash 저장소에 숫자를 쌓아요. 저장소가 없으면 탭을 숨겨요.
+========================================================= */
+const VISIT_SID = Math.random().toString(36).slice(2, 12) + Date.now().toString(36);
+function fmtN(n){ return Number(n || 0).toLocaleString('ko-KR'); }
+function visitsInner(v){
+  return '<span class="vis__live"><span class="vis__dot" aria-hidden="true"></span>지금 <b>'+fmtN(v.online)+'</b></span>' +
+    '<span class="vis__sep" aria-hidden="true"></span><span>오늘 <b>'+fmtN(v.today)+'</b></span>';
+}
+function visitsChip(){
+  const v = state.visits;
+  if(!v) return '';
+  return '<span class="vis" id="gnb-vis" role="status" title="지금 접속 '+fmtN(v.online)+'명 · 오늘 방문 '+fmtN(v.today)+'명 · 지금까지 '+fmtN(v.total)+'명">'+visitsInner(v)+'</span>';
+}
+async function pingVisits(){
+  if(location.protocol === 'file:') return;
+  const KEY = 'kidsNewsLab:visitDay';
+  let seen = null;
+  try{ seen = localStorage.getItem(KEY); }catch(e){}
+  const visit = seen !== todayStr();
+  try{
+    const r = await fetch('/api/visits', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({sid:VISIT_SID, visit:visit})});
+    const d = await r.json();
+    if(!d || !d.ok || !d.enabled) return;
+    if(visit){ try{ localStorage.setItem(KEY, todayStr()); }catch(e){} }
+    const first = !state.visits;
+    state.visits = {online:d.online, today:d.today, total:d.total};
+    const el = document.getElementById('gnb-vis');
+    if(el){ el.innerHTML = visitsInner(state.visits); el.title = '지금 접속 '+fmtN(d.online)+'명 · 오늘 방문 '+fmtN(d.today)+'명 · 지금까지 '+fmtN(d.total)+'명'; }
+    else if(first){ const g = document.getElementById('gnb'); if(g) g.insertAdjacentHTML('beforeend', visitsChip()); }
+  }catch(e){}
+}
+function startVisits(){
+  pingVisits();
+  setInterval(function(){ if(!document.hidden) pingVisits(); }, 60000);
+  document.addEventListener('visibilitychange', function(){ if(!document.hidden) pingVisits(); });
+}
+
+/* =========================================================
    INIT
 ========================================================= */
 async function init(){
@@ -3128,6 +3176,7 @@ async function init(){
   try{ if('scrollRestoration' in history) history.scrollRestoration = 'manual'; }catch(e){}
   applyRoute(true);
   window.addEventListener('resize', fitHeader);
+  startVisits();
 }
 init();
 
