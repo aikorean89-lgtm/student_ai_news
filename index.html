@@ -139,6 +139,30 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9em;back
 @keyframes visPulse{50%{box-shadow:0 0 0 5px color-mix(in srgb,var(--ok) 6%,transparent)}}
 @media(prefers-reduced-motion:reduce){.vis__dot{animation:none}}
 .gnb .vis--off b{color:var(--ink-3)}
+.gnb .vis{border:0;cursor:pointer;font-family:var(--sans);transition:transform .15s,box-shadow .2s}
+.gnb .vis:hover{transform:translateY(-1px);box-shadow:var(--edge),inset 0 0 0 1px var(--ink-3),var(--sh-2)}
+/* 접속자 수 창 (일별·주별) */
+.modal__box.vst{max-width:560px;justify-items:stretch;gap:14px;padding:22px 24px 20px;text-align:left}
+.vst__h{display:flex;align-items:center;justify-content:space-between}
+.vst__h h3{font-size:20px;font-weight:800}
+.vst__seg{justify-self:start}
+.vst__sum{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.vst__sum div{padding:10px 8px;border-radius:12px;background:var(--bg);box-shadow:inset 0 0 0 1px var(--line);text-align:center}
+.vst__sum span{display:block;font-size:12px;font-weight:700;color:var(--ink-3)}
+.vst__sum b{display:block;margin-top:2px;font-size:20px;font-weight:800;font-variant-numeric:tabular-nums}
+.vst__chart{display:grid;align-items:end;gap:6px;height:190px;padding:10px 4px 0;border-bottom:1px solid var(--line)}
+.vst__chart--day{grid-template-columns:repeat(14,1fr)}
+.vst__chart--week{grid-template-columns:repeat(8,1fr);gap:10px}
+.vst__col{position:relative;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;padding-bottom:22px}
+.vst__bar{width:100%;max-width:34px;border-radius:6px 6px 2px 2px;background:color-mix(in srgb,var(--main) 45%,var(--surface));transition:height .4s cubic-bezier(.3,.7,.3,1)}
+.vst__col.is-cur .vst__bar{background:var(--main);box-shadow:0 6px 14px -6px color-mix(in srgb,var(--main) 90%,transparent)}
+.vst__n{margin-bottom:3px;font-size:11px;font-weight:800;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.vst__lb{position:absolute;bottom:2px;font-size:10.5px;font-weight:700;color:var(--ink-3);white-space:nowrap}
+.vst__col.is-cur .vst__lb{color:var(--ink)}
+.vst__lb i{font-style:normal}
+.vst__msg{padding:40px 0;text-align:center;color:var(--ink-2);line-height:1.7}
+.vst__note{font-size:12.5px;line-height:1.6;color:var(--ink-3)}
+@media(max-width:520px){.vst__sum{grid-template-columns:repeat(2,1fr)}.vst__chart--day{gap:3px}.vst__chart--day .vst__lb{font-size:10.5px}.vst__chart--day .vst__lb i{display:none}.modal__box.vst{padding:20px 16px 18px}}
 .vis--off .vis__dot{background:var(--ink-3);box-shadow:none;animation:none}
 
 /* 처음 화면 */
@@ -2748,6 +2772,8 @@ function renderApp(){
         '<button type="button" class="btn btn--main" data-action="close-badge-modal">'+(more ? '다음 축하 보기' : '확인')+'</button>' +
       '</div>' +
     '</div>';
+  } else if(state.visModal){
+    modalRoot.innerHTML = renderVisModal();
   } else if(state.wordPop){
     const w = state.wordPop;
     modalRoot.innerHTML = '<div class="pop" role="dialog" aria-label="낱말 뜻">' +
@@ -3028,6 +3054,9 @@ document.addEventListener('click', function(e){
     }
   }
   else if(action === 'close-badge-modal'){ showNextBadge(); }
+  else if(action === 'vis-open'){ openVisitStats(); }
+  else if(action === 'vis-close'){ state.visModal = null; renderApp(); }
+  else if(action === 'vis-tab'){ if(state.visModal){ state.visModal.tab = el.getAttribute('data-tab'); renderApp(); } }
   else if(action === 'go-study'){ goStudy(el.getAttribute('data-mode')); }
   else if(action === 'study-start'){ goStudy(el.getAttribute('data-mode')); }
   else if(action === 'word-pop'){
@@ -3140,6 +3169,7 @@ document.addEventListener('input', function(e){
 });
 document.addEventListener('keydown', function(e){
   if(e.key === 'Escape' && state.wordPop){ state.wordPop = null; renderApp(); }
+  if(e.key === 'Escape' && state.visModal){ state.visModal = null; renderApp(); }
   // 밑줄 낱말·뉴스 카드처럼 단추가 아닌 곳도 키보드(Enter·Space)로 열 수 있어요.
   const t = e.target;
   if((e.key === 'Enter' || e.key === ' ') && t && t.getAttribute && t.getAttribute('data-action') && t.hasAttribute('tabindex') &&
@@ -3183,11 +3213,11 @@ function visitsTitle(v){
 }
 function visitsChip(){
   const v = state.visits;
-  return '<span class="vis'+(visitsReady(v) ? '' : ' vis--off')+'" id="gnb-vis" role="status" aria-label="접속자 수" title="'+visitsTitle(v)+'">'+visitsInner(v)+'</span>';
+  return '<button type="button" class="vis'+(visitsReady(v) ? '' : ' vis--off')+'" id="gnb-vis" data-action="vis-open" aria-label="접속자 수 (눌러서 일별·주별 보기)" title="'+visitsTitle(v)+' · 눌러서 일별·주별 보기">'+visitsInner(v)+'</button>';
 }
 function paintVisits(){
   const el = document.getElementById('gnb-vis');
-  if(el){ el.innerHTML = visitsInner(state.visits); el.title = visitsTitle(state.visits); el.classList.toggle('vis--off', !visitsReady(state.visits)); }
+  if(el){ el.innerHTML = visitsInner(state.visits); el.title = visitsTitle(state.visits) + ' · 눌러서 일별·주별 보기'; el.classList.toggle('vis--off', !visitsReady(state.visits)); }
   else { const g = document.getElementById('gnb'); if(g) g.insertAdjacentHTML('beforeend', visitsChip()); }
 }
 async function pingVisits(){
@@ -3209,6 +3239,54 @@ async function pingVisits(){
   }catch(e){
     if(!visitsReady(state.visits)){ state.visits = {off:true}; paintVisits(); }
   }
+}
+/* 접속자 수 탭을 누르면: 일별(최근 14일)·주별(최근 8주) 막대그래프 */
+async function openVisitStats(){
+  state.visModal = {tab: (state.visModal && state.visModal.tab) || 'day', data: null, err: false};
+  renderApp();
+  try{
+    const r = await fetch('/api/visits?stats=1', {cache:'no-store'});
+    const d = await r.json();
+    if(!state.visModal) return;
+    if(d && d.ok && d.enabled) state.visModal.data = d; else state.visModal.err = true;
+  }catch(e){ if(state.visModal) state.visModal.err = true; }
+  if(state.visModal) renderApp();
+}
+function mdLabel(ymd){ return (+ymd.slice(4, 6)) + '/' + (+ymd.slice(6, 8)); }
+function renderVisModal(){
+  const m = state.visModal, d = m.data;
+  let body;
+  if(m.err) body = '<p class="vst__msg">접속자 수를 불러오지 못했어요.<br>잠시 뒤에 다시 눌러 주세요.</p>';
+  else if(!d) body = '<p class="vst__msg">접속자 수를 불러오는 중이에요.</p>';
+  else {
+    const day = m.tab === 'day';
+    const rows = day ? d.daily.map(function(x, i){ return {lb: '<i>'+(+x.d.slice(4, 6))+'/</i>'+(+x.d.slice(6, 8)), n: x.n, cur: i === d.daily.length - 1, tip: mdLabel(x.d) + ' 방문 ' + fmtN(x.n) + '명'}; })
+                     : d.weekly.map(function(x, i){ const last = i === d.weekly.length - 1; return {lb: last ? '이번 주' : mdLabel(x.start) + '~', n: x.n, cur: last, tip: mdLabel(x.start) + ' 주 방문 ' + fmtN(x.n) + '명'}; });
+    const max = Math.max(1, Math.max.apply(null, rows.map(function(r){ return r.n; })));
+    const today = d.daily[d.daily.length - 1].n, week = d.weekly[d.weekly.length - 1].n;
+    body = '<div class="vst__sum">' +
+        '<div><span>지금 접속</span><b>'+fmtN(d.online)+'</b></div>' +
+        '<div><span>오늘 방문</span><b>'+fmtN(today)+'</b></div>' +
+        '<div><span>이번 주 방문</span><b>'+fmtN(week)+'</b></div>' +
+        '<div><span>지금까지</span><b>'+fmtN(d.total)+'</b></div>' +
+      '</div>' +
+      '<div class="vst__chart vst__chart--'+(day ? 'day' : 'week')+'" role="img" aria-label="'+(day ? '최근 14일 일별 방문 수' : '최근 8주 주별 방문 수')+'">' +
+        rows.map(function(r){
+          const h = r.n ? Math.max(4, Math.round(r.n / max * 100)) : 0;
+          return '<div class="vst__col'+(r.cur ? ' is-cur' : '')+'" title="'+r.tip+'"><span class="vst__n">'+(r.n ? fmtN(r.n) : '')+'</span>' +
+            '<span class="vst__bar" style="height:'+h+'%"></span><span class="vst__lb">'+r.lb+'</span></div>';
+        }).join('') +
+      '</div>' +
+      '<p class="vst__note">같은 브라우저는 하루에 한 번만 세요.<br>숫자는 2026년 11월 20일부터 모았어요.</p>';
+  }
+  return '<div class="modal" data-action="vis-close">' +
+    '<div class="modal__box vst" role="dialog" aria-modal="true" aria-labelledby="vst-title" data-action="vis-stay">' +
+      '<div class="vst__h"><h3 id="vst-title">접속자 수</h3><button type="button" class="pop__x" data-action="vis-close" aria-label="닫기">'+ic('close')+'</button></div>' +
+      '<div class="seg vst__seg" role="group" aria-label="보기">' +
+        '<button type="button" data-action="vis-tab" data-tab="day" aria-pressed="'+(m.tab === 'day')+'">일별 (최근 14일)</button>' +
+        '<button type="button" data-action="vis-tab" data-tab="week" aria-pressed="'+(m.tab === 'week')+'">주별 (최근 8주)</button>' +
+      '</div>' + body +
+    '</div></div>';
 }
 function startVisits(){
   pingVisits();

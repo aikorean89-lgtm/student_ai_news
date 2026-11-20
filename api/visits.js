@@ -37,9 +37,34 @@ async function pipeline(cmds) {
   return (await r.json()).map((x) => x.result);
 }
 
+// 일별·주별 그래프용: 최근 56일(8주)의 날짜별 방문 수를 한 번에 읽어요.
+// 주는 월요일에 시작해요 (한국 시간).
+async function stats() {
+  const N = 56;
+  const days = [];
+  for (let i = N - 1; i >= 0; i--) days.push(dayKST(i));
+  const out = await pipeline([['MGET', ...days.map((d) => P + 'day:' + d)], ['GET', P + 'total'], ['ZCOUNT', P + 'online', String(Date.now() - ONLINE_MS), '+inf']]);
+  const vals = (out[0] || []).map((v) => Number(v || 0) || 0);
+  const daily = days.map((d, i) => ({ d, n: vals[i] }));
+  const weeks = [];
+  daily.forEach((x) => {
+    const dt = new Date(Date.UTC(+x.d.slice(0, 4), +x.d.slice(4, 6) - 1, +x.d.slice(6, 8)));
+    const dow = (dt.getUTCDay() + 6) % 7; // 월 = 0
+    const start = new Date(dt.getTime() - dow * 86400e3).toISOString().slice(0, 10).replace(/-/g, '');
+    const last = weeks[weeks.length - 1];
+    if (last && last.start === start) last.n += x.n;
+    else weeks.push({ start, n: x.n });
+  });
+  return { daily: daily.slice(-14), weekly: weeks.slice(-8), total: Number(out[1] || 0) || 0, online: Number(out[2] || 0) || 0 };
+}
+
 module.exports = async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
   if (!URL_ || !TOKEN) return res.status(200).json({ ok: true, enabled: false });
+  if (req.method === 'GET' && req.query && req.query.stats) {
+    try { return res.status(200).json({ ok: true, enabled: true, ...(await stats()) }); }
+    catch (e) { return res.status(200).json({ ok: false, enabled: true }); }
+  }
 
   let body = {};
   if (req.method === 'POST') {
