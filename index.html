@@ -912,7 +912,7 @@ body::before{content:'';position:absolute;inset:0 0 auto 0;height:1100px;z-index
   .ws th,.ws td{padding:6px 8px;border:1px solid #888;text-align:left;vertical-align:top}
   .ws tbody th{width:20%;white-space:nowrap}
   .ws__fo th:nth-child(n+2),.ws__fo td:nth-child(n+2){width:11%;text-align:center}
-  .ws__q{margin-bottom:9px;break-inside:avoid}
+  .ws__q{margin-bottom:9px;padding-left:2em;break-inside:avoid}
   .ws__q>p:first-child{font-weight:700}
   .ws__opts{display:flex;flex-wrap:wrap;gap:2px 18px;margin-top:2px}
   .ws__hint{margin-top:3px;font-size:9.5pt}
@@ -2693,14 +2693,15 @@ function worksheetHtml(a){
       fo.map(function(f, i){ return '<tr><td>'+(i + 1)+'. '+escapeHtml(f.text)+'</td><td></td><td></td></tr>'; }).join('') +
     '</tbody></table></section>' : '') +
     (quiz.length ? '<section><h2>3. 내용 퀴즈</h2>' + quiz.map(function(q, i){
-      return '<div class="ws__q"><p>'+(i + 1)+'. '+escapeHtml(q.question)+'</p><p class="ws__opts">' +
+      // 큰 제목 '3. 내용 퀴즈'와 헷갈리지 않게 문제 번호는 1) 2) 3)으로, 두 칸 들여 써요.
+      return '<div class="ws__q"><p>'+(i + 1)+') '+escapeHtml(q.question)+'</p><p class="ws__opts">' +
         q.options.map(function(o, j){ return '<span>'+nums[j]+' '+escapeHtml(o)+'</span>'; }).join('') + '</p></div>';
     }).join('') + '</section>' : '') +
     (a.think ? '<section><h2>4. 생각 쓰기</h2><p>'+escapeHtml(a.think)+'</p><p class="ws__hint">나는 ~라고 생각해요. 왜냐하면 ~ 때문이에요.</p>' +
       '<div class="ws__lines"><span></span><span></span><span></span><span></span></div></section>' : '') +
     '<section class="ws__key"><h2>정답 (선생님용)</h2>' +
       (fo.length ? '<p><b>사실·의견</b> ' + fo.map(function(f, i){ return (i + 1)+'. '+(f.type === 'fact' ? '사실' : '의견'); }).join(' · ') + '</p>' : '') +
-      (quiz.length ? '<p><b>내용 퀴즈</b> ' + quiz.map(function(q, i){ return (i + 1)+'. '+nums[q.answer]+' '+escapeHtml(q.options[q.answer]); }).join(' · ') + '</p>' : '') +
+      (quiz.length ? '<p><b>내용 퀴즈</b> ' + quiz.map(function(q, i){ return (i + 1)+') '+nums[q.answer]+' '+escapeHtml(q.options[q.answer]); }).join(' · ') + '</p>' : '') +
       '<p><b>원문 주소</b> '+escapeHtml(safeUrl(a.url))+'</p>' +
     '</section>' +
   '</article>';
