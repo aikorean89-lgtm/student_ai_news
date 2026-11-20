@@ -3204,11 +3204,11 @@ function fmtN(n){ return Number(n || 0).toLocaleString('ko-KR'); }
 function visitsReady(v){ return !!(v && !v.off); }
 function visitsInner(v){
   const ok = visitsReady(v);
-  return '<span class="vis__live"><span class="vis__dot" aria-hidden="true"></span>지금 <b>'+(ok ? fmtN(v.online) : '–')+'</b></span>' +
-    '<span class="vis__sep" aria-hidden="true"></span><span>오늘 <b>'+(ok ? fmtN(v.today) : '–')+'</b></span>';
+  return '<span class="vis__live"><span class="vis__dot" aria-hidden="true"></span>오늘 <b>'+(ok ? fmtN(v.today) : '–')+'</b></span>' +
+    '<span class="vis__sep" aria-hidden="true"></span><span>누적 <b>'+(ok ? fmtN(v.total) : '–')+'</b></span>';
 }
 function visitsTitle(v){
-  if(visitsReady(v)) return '지금 접속 '+fmtN(v.online)+'명 · 오늘 방문 '+fmtN(v.today)+'명 · 지금까지 '+fmtN(v.total)+'명';
+  if(visitsReady(v)) return '오늘 방문 '+fmtN(v.today)+'명 · 누적 방문 '+fmtN(v.total)+'명 · 지금 접속 '+fmtN(v.online)+'명';
   return (v && v.off) ? '접속자 수를 세는 저장소가 연결되면 숫자가 나와요' : '접속자 수를 불러오는 중이에요';
 }
 function visitsChip(){
@@ -3268,7 +3268,7 @@ function renderVisModal(){
         '<div><span>지금 접속</span><b>'+fmtN(d.online)+'</b></div>' +
         '<div><span>오늘 방문</span><b>'+fmtN(today)+'</b></div>' +
         '<div><span>이번 주 방문</span><b>'+fmtN(week)+'</b></div>' +
-        '<div><span>지금까지</span><b>'+fmtN(d.total)+'</b></div>' +
+        '<div><span>누적 방문</span><b>'+fmtN(d.total)+'</b></div>' +
       '</div>' +
       '<div class="vst__chart vst__chart--'+(day ? 'day' : 'week')+'" role="img" aria-label="'+(day ? '최근 14일 일별 방문 수' : '최근 8주 주별 방문 수')+'">' +
         rows.map(function(r){
