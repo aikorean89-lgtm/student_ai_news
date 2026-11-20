@@ -138,6 +138,8 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9em;back
 .vis__sep{width:1px;height:11px;background:var(--line-2)}
 @keyframes visPulse{50%{box-shadow:0 0 0 5px color-mix(in srgb,var(--ok) 6%,transparent)}}
 @media(prefers-reduced-motion:reduce){.vis__dot{animation:none}}
+.gnb .vis--off b{color:var(--ink-3)}
+.vis--off .vis__dot{background:var(--ink-3);box-shadow:none;animation:none}
 
 /* 처음 화면 */
 .intro{padding-top:40px}
@@ -3168,14 +3170,25 @@ document.getElementById('search-input').addEventListener('input', function(e){
 ========================================================= */
 const VISIT_SID = Math.random().toString(36).slice(2, 12) + Date.now().toString(36);
 function fmtN(n){ return Number(n || 0).toLocaleString('ko-KR'); }
+// 숫자를 아직 못 받았거나 저장소가 연결되지 않았으면 '–'로 보여 줘요. (탭은 늘 그 자리에 있어요)
+function visitsReady(v){ return !!(v && !v.off); }
 function visitsInner(v){
-  return '<span class="vis__live"><span class="vis__dot" aria-hidden="true"></span>지금 <b>'+fmtN(v.online)+'</b></span>' +
-    '<span class="vis__sep" aria-hidden="true"></span><span>오늘 <b>'+fmtN(v.today)+'</b></span>';
+  const ok = visitsReady(v);
+  return '<span class="vis__live"><span class="vis__dot" aria-hidden="true"></span>지금 <b>'+(ok ? fmtN(v.online) : '–')+'</b></span>' +
+    '<span class="vis__sep" aria-hidden="true"></span><span>오늘 <b>'+(ok ? fmtN(v.today) : '–')+'</b></span>';
+}
+function visitsTitle(v){
+  if(visitsReady(v)) return '지금 접속 '+fmtN(v.online)+'명 · 오늘 방문 '+fmtN(v.today)+'명 · 지금까지 '+fmtN(v.total)+'명';
+  return (v && v.off) ? '접속자 수를 세는 저장소가 연결되면 숫자가 나와요' : '접속자 수를 불러오는 중이에요';
 }
 function visitsChip(){
   const v = state.visits;
-  if(!v) return '';
-  return '<span class="vis" id="gnb-vis" role="status" title="지금 접속 '+fmtN(v.online)+'명 · 오늘 방문 '+fmtN(v.today)+'명 · 지금까지 '+fmtN(v.total)+'명">'+visitsInner(v)+'</span>';
+  return '<span class="vis'+(visitsReady(v) ? '' : ' vis--off')+'" id="gnb-vis" role="status" aria-label="접속자 수" title="'+visitsTitle(v)+'">'+visitsInner(v)+'</span>';
+}
+function paintVisits(){
+  const el = document.getElementById('gnb-vis');
+  if(el){ el.innerHTML = visitsInner(state.visits); el.title = visitsTitle(state.visits); el.classList.toggle('vis--off', !visitsReady(state.visits)); }
+  else { const g = document.getElementById('gnb'); if(g) g.insertAdjacentHTML('beforeend', visitsChip()); }
 }
 async function pingVisits(){
   if(location.protocol === 'file:') return;
@@ -3186,14 +3199,16 @@ async function pingVisits(){
   try{
     const r = await fetch('/api/visits', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({sid:VISIT_SID, visit:visit})});
     const d = await r.json();
-    if(!d || !d.ok || !d.enabled) return;
+    if(!d || !d.ok || !d.enabled){
+      if(!visitsReady(state.visits)){ state.visits = {off:true}; paintVisits(); }
+      return;
+    }
     if(visit){ try{ localStorage.setItem(KEY, todayStr()); }catch(e){} }
-    const first = !state.visits;
     state.visits = {online:d.online, today:d.today, total:d.total};
-    const el = document.getElementById('gnb-vis');
-    if(el){ el.innerHTML = visitsInner(state.visits); el.title = '지금 접속 '+fmtN(d.online)+'명 · 오늘 방문 '+fmtN(d.today)+'명 · 지금까지 '+fmtN(d.total)+'명'; }
-    else if(first){ const g = document.getElementById('gnb'); if(g) g.insertAdjacentHTML('beforeend', visitsChip()); }
-  }catch(e){}
+    paintVisits();
+  }catch(e){
+    if(!visitsReady(state.visits)){ state.visits = {off:true}; paintVisits(); }
+  }
 }
 function startVisits(){
   pingVisits();
