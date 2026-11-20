@@ -17,15 +17,16 @@ const warn = (id, msg) => warnings.push(`[${id}] ${msg}`);
 // 분야: 과학·우주, IT·AI, 환경·날씨, 동물·자연, 사회, 교육, 경제, 세계, 어린이, 역사, 문화·예술, 스포츠
 const CATEGORIES = ['science', 'tech', 'env', 'nature', 'society', 'school', 'economy', 'world', 'kids', 'history', 'culture', 'sports'];
 const LEVELS = ['1-6', '3-6', '5-6'];
-const MAX_ARTICLES = 150;      // 전체 기사 수
-const MAX_PER_CATEGORY = 12;   // 분야마다 기사 수
+// 기사 수는 제한하지 않고 계속 쌓아요.
 const FIRST_BATCH = '2026-11-17'; // 처음 한꺼번에 실은 기사들은 '3일 안' 규칙에서 빼요
 const ARCHIVE_DAYS = 60;       // 분야 둘러보기용 지난 기사(archive: true)는 보도 60일 안
 // 어린이 기사에 절대 나오면 안 되는 낱말 (나오면 오류)
 const BANNED = ['살인', '살해', '시신', '사망자', '숨진', '숨졌', '자살', '극단적 선택', '자해', '성폭행', '성추행', '성범죄', '성착취', '음란',
-  '마약', '도박', '음주운전', '흉기', '총격', '총기', '폭탄', '테러', '참수', '고문', '학살', '유괴', '납치', '스토킹'];
+  '마약', '도박', '음주운전', '흉기', '총격', '총기', '폭탄', '테러', '참수', '고문', '학살', '유괴', '납치', '스토킹',
+  // 폭력·범죄·선정적인 내용 (2026-11-20 선생님 요청으로 금지 낱말로 옮김)
+  '폭력', '폭행', '범죄', '학대', '체포', '구속', '재판', '징역', '처벌', '부정행위', '전쟁', '선정적', '19금', '불법 촬영'];
 // 나오면 검토 메모(review.note)에 까닭을 꼭 적어야 하는 낱말 (경고)
-const CAREFUL = ['학대', '폭행', '폭력', '전쟁', '사고', '부상', '범죄', '체포', '구속', '재판', '선거', '탄핵', '정당', '음주', /(^|[^가-힣])술(?=[을이은도과\s,.]|$)/, '담배', '사기', '재난', '지진', '화재', '피해'];
+const CAREFUL = ['사고', '부상', '선거', '탄핵', '정당', '음주', /(^|[^가-힣])술(?=[을이은도과\s,.]|$)/, '담배', '사기', '재난', '지진', '화재', '피해'];
 
 // ---- 읽기 ----
 let data;
@@ -63,7 +64,6 @@ function sentences(text) {
 }
 
 if (!isDate(data.updated)) err('전체', `updated 날짜 형식이 틀렸어요: ${data.updated}`);
-if (data.articles.length > MAX_ARTICLES) err('전체', `기사가 ${data.articles.length}개예요. 오래된 기사를 지워 ${MAX_ARTICLES}개 이하로 맞춰 주세요.`);
 
 const ids = new Set(), urls = new Set(), titles = new Set();
 for (const a of data.articles) {
@@ -134,7 +134,6 @@ const newest = data.articles.filter(a => a.archive !== true).reduce((m, a) => (a
 if (newest && data.updated !== newest) warn('전체', `updated(${data.updated})가 가장 최근에 실은 날짜(${newest})와 달라요.`);
 const cats = {};
 data.articles.forEach(a => { cats[a.category] = (cats[a.category] || 0) + 1; });
-for (const [c, n] of Object.entries(cats)) if (n > MAX_PER_CATEGORY) err('전체', `${c} 분야 기사가 ${n}개예요. 그 분야에서 보도 날짜가 가장 오래된 기사부터 지워 ${MAX_PER_CATEGORY}개 이하로 맞춰 주세요.`);
 
 console.log(`기사 ${data.articles.length}개 · 분야별 ${JSON.stringify(cats)} · 최근 업데이트 ${data.updated} · 오늘 ${today}`);
 if (warnings.length) console.log('\n경고 ' + warnings.length + '개\n- ' + warnings.join('\n- '));
