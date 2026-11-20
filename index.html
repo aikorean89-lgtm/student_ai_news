@@ -1252,7 +1252,38 @@ function aiError(code, detail){
   return e;
 }
 
+// 'AI 쉽게 읽기'와 'AI 문장 분석'은 기사를 실을 때 AI(Claude)가 미리 만들어 둔 자료(data/ai/<id>.json)를 읽어요.
+// 그래서 API 키가 없어도 바로 보여 줄 수 있어요. 자료가 없으면 기사의 핵심 낱말·사실·의견 문장으로 대신 보여 줘요.
+const premade = {};
+async function loadPremade(id){
+  if(premade[id] !== undefined) return premade[id];
+  try{
+    const r = await fetch('data/ai/'+encodeURIComponent(id)+'.json', {cache:'no-cache'});
+    premade[id] = r.ok ? await r.json() : null;
+  }catch(e){ premade[id] = null; }
+  return premade[id];
+}
+function localAI(type, article, level){
+  if(type === 'facts'){
+    const fo = article.fo || [];
+    return {
+      facts: fo.filter(function(f){ return f.type === 'fact'; }).map(function(f){ return {content:f.text, reason:f.reason}; }),
+      opinions: fo.filter(function(f){ return f.type === 'opinion'; }).map(function(f){ return {content:f.text, reason:f.reason}; }),
+      question: article.think || ''
+    };
+  }
+  const per = level === '1-2' ? 1 : level === '3-4' ? 2 : 99;
+  const lines = [];
+  String(article.body || '').split(/\n\n+/).forEach(function(p){ splitSentences(p).slice(0, per).forEach(function(x){ lines.push(x); }); });
+  return { simplified: lines, vocabulary: (article.words || []).slice(0, 4), question: article.think || '' };
+}
 async function callAI(type, article, level){
+  if(type === 'easy' || type === 'facts'){
+    const pm = await loadPremade(article.id);
+    if(pm && type === 'easy' && pm.easy && pm.easy[level]) return pm.easy[level];
+    if(pm && type === 'facts' && pm.facts) return pm.facts;
+    return localAI(type, article, level);
+  }
   if(location.protocol === 'file:') throw aiError('NO_SERVER', '파일을 직접 열면 서버 함수가 없어요.');
   let res;
   try{
@@ -1624,14 +1655,11 @@ function renderFactsPanel(article){
   );
 }
 
-// 어린이에게는 쉬운 말로, 선생님에게는 고치는 방법을 따로 알려 줘요.
+// 어린이에게 쉬운 말로 알려 줘요.
 const AI_ERRORS = {
-  NO_KEY:    {icon:'hourglass', title:'AI 선생님이 아직 준비 중이에요', lines:['선생님이 AI 설정을 마치면 바로 쓸 수 있어요.','그동안 기사를 소리 내어 읽어 볼까요?'],
-              teacher:['Vercel 프로젝트 → Settings → Environment Variables에 <code>ANTHROPIC_API_KEY</code>를 등록해 주세요.','등록한 뒤 Deployments에서 Redeploy를 한 번 눌러야 적용돼요.']},
-  BAD_KEY:   {icon:'key', title:'AI 선생님과 연결이 안 돼요', lines:['선생님께 이 화면을 보여 주세요.','고치는 방법이 아래에 적혀 있어요.'],
-              teacher:['등록된 <code>ANTHROPIC_API_KEY</code>가 올바르지 않거나 만료됐어요.','platform.claude.com에서 키를 확인하고 다시 등록해 주세요.']},
-  NO_SERVER: {icon:'home', title:'여기서는 AI를 쓸 수 없어요', lines:['인터넷 주소로 들어오면 AI를 쓸 수 있어요.','선생님께 사이트 주소를 물어보세요.'],
-              teacher:['파일을 직접 열면 서버 함수(/api/ai)가 없어서 AI가 작동하지 않아요.','Vercel에 배포된 주소로 접속해 주세요.']},
+  NO_KEY:    {icon:'hourglass', title:'AI 선생님이 아직 준비 중이에요', lines:['선생님이 AI 설정을 마치면 바로 쓸 수 있어요.','그동안 기사를 소리 내어 읽어 볼까요?']},
+  BAD_KEY:   {icon:'key', title:'AI 선생님과 연결이 안 돼요', lines:['잠시 뒤에 다시 눌러 주세요.','그동안 기사를 소리 내어 읽어 볼까요?']},
+  NO_SERVER: {icon:'home', title:'여기서는 AI를 쓸 수 없어요', lines:['인터넷 주소로 들어오면 AI를 쓸 수 있어요.','선생님께 사이트 주소를 물어보세요.']},
   RATE_LIMIT:{icon:'clock', title:'AI가 잠깐 쉬고 있어요', lines:['질문이 한꺼번에 많이 몰렸어요.','1분 뒤에 다시 눌러 주세요.']},
   BUSY:      {icon:'clock', title:'AI가 잠깐 쉬고 있어요', lines:['지금 AI를 쓰는 사람이 아주 많아요.','1분 뒤에 다시 눌러 주세요.']},
   NETWORK:   {icon:'wifi', title:'인터넷 연결이 잠깐 끊겼어요', lines:['와이파이가 잘 연결됐는지 확인해 주세요.','그리고 다시 시도하기를 눌러 주세요.']},
@@ -1645,9 +1673,6 @@ function errorBox(type, err){
     '<h4>'+info.title+'</h4>' +
     '<p>'+info.lines.map(function(l){ return '<span class="sent">'+l+'</span>'; }).join('')+'</p>' +
     '<button type="button" class="btn btn--ink btn--sm" data-action="retry-ai" data-type="'+type+'">'+ic('refresh')+'다시 시도하기</button>' +
-    (info.teacher ? '<details class="tnote"><summary>선생님께 · 고치는 방법</summary><div>' +
-      info.teacher.map(function(l){ return '<span class="sent">'+l+'</span>'; }).join('') +
-      '<span class="sent">오류 코드: <code>'+escapeHtml(code)+'</code></span></div></details>' : '') +
   '</div>';
 }
 
@@ -1718,7 +1743,7 @@ const MODES = [
 ];
 function renderHelper(article){
   return '<section class="helper" aria-label="AI 읽기 도우미">' +
-    '<div class="sec__h"><h2>AI 읽기 도우미</h2><span class="sec__r">AI가 그때그때 만들어요</span></div>' +
+    '<div class="sec__h"><h2>AI 읽기 도우미</h2><span class="sec__r">AI가 미리 만들어 두었어요</span></div>' +
     '<div class="mtabs mtabs--2">' + MODES.map(function(m){
       return '<button type="button" class="mtab" data-action="set-mode" data-mode="'+m.id+'" aria-pressed="'+(state.mode===m.id)+'">' +
         '<span class="mtab__i">'+ic(m.icon)+'</span><span><b>'+m.title+'</b><small>'+m.desc+'</small></span></button>';
